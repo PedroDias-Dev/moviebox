@@ -1,7 +1,5 @@
 'use client';
 
-import Select from '@/components/global/form/select/select';
-import PreLoad from '@/components/global/loading/preload';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -37,10 +35,11 @@ const UserCreate = () => {
     }
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { full_name, email, phone, group } = values;
+  // const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async () => {
+    // const { full_name, email, phone, group } = values;
 
-    let group_id = 0;
+    // let group_id = 0;
 
     try {
       // create user

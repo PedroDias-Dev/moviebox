@@ -4,10 +4,10 @@ import PageTransition from '@/components/motion/PageTransition';
 import Sidebar from '@/components/admin/sidebar';
 
 import AuthRoute from '@/components/routes/AuthRoute';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [profile, setProfile] = useState<any>(null);
+  const [profile] = useState<any>(null);
 
   return (
     <AuthRoute type='admin'>

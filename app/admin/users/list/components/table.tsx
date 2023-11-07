@@ -11,7 +11,7 @@ const UsersTable = ({ data, setSelectedUser, getData }: any) => {
   const { toast } = useToast();
   const triggerRef = useRef(null) as any;
 
-  const deleteUser = async (id: any) => {
+  const deleteUser = async () => {
     try {
       // delete user
 

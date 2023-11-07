@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -27,7 +26,7 @@ export default function Home() {
         <span className='text-[18px]'>Mais Populares</span>
 
         <div className='flex gap-2 overflow-x-auto'>
-          {Array.from(Array(5)).map(e => (
+          {Array.from(Array(5)).map(() => (
             <div className='flex flex-col gap-3 p-4 min-w-[200px] rounded border-solid border-zinc-700 border-2 transition-all hover:bg-zinc-700'>
               <div className='flex flex-col gap-1'>
                 <span className='text-[16px] font-[700]'>MALOU RATAO 3</span>

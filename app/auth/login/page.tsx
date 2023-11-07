@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';

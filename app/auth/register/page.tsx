@@ -6,7 +6,7 @@ import { useState } from 'react';
 import Account from './steps/account';
 import { KeyRound, PartyPopper } from 'lucide-react';
 import Privacy from './steps/privacy';
-import { useAuth } from '@/hooks/useAuth';
+// import { useAuth } from '@/hooks/useAuth';
 
 // import { useRouter } from "next/router";
 export default Register;
@@ -31,19 +31,19 @@ const steps = [
 function Register() {
   const { toast } = useToast();
   const { setLoading } = useLoading();
-  const { refresh } = useAuth();
+  // const { refresh } = useAuth();
 
   const [step, setStep] = useState(1);
   const [userData, setUserData] = useState({});
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async () => {
+    // const onSubmit = async (data: any) => {
     setLoading(true);
 
-    const { full_name, email, phone, password, group_name, users, championships } = data;
+    // const { full_name, email, phone, password, group_name, users, championships } = data;
 
     try {
       // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
       // setTimeout(() => {
       //   refresh(userCredential);
       // }, 2000);
@@ -62,7 +62,7 @@ function Register() {
     setUserData(data);
 
     if (step === steps.length) {
-      return onSubmit(data);
+      return onSubmit();
     }
 
     setStep(step + 1);

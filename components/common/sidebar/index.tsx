@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { variants } from './variants';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BarChart, Crown, LogOut, Medal, Trophy, User } from 'lucide-react';
+import { BarChart, LogOut, Trophy, User } from 'lucide-react';
 
 const Path = (props: any) => (
   <path fill='transparent' strokeWidth='3' stroke='white' strokeLinecap='round' {...props} />

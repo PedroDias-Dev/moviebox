@@ -21,8 +21,6 @@ function Users() {
   }, [refresh]);
 
   const getUsers = async () => {
-    let q;
-
     setUsers([]);
   };
 

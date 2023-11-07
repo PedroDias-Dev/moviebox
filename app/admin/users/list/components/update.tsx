@@ -43,8 +43,9 @@ const UsersUpdate = ({ selectedUser, getData }: any) => {
 
   const { setLoading } = useLoading();
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { full_name, email, phone } = values;
+  const onSubmit = async () => {
+    // const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // const { full_name, email, phone } = values;
 
     setLoading(true);
 
