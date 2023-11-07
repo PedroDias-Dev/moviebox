@@ -1,8 +1,6 @@
 'use client';
 
 import { Separator } from '@/components/ui/separator';
-import { auth } from '@/libs/firebase';
-import { signOut } from 'firebase/auth';
 import { animate, AnimatePresence, motion, useCycle } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect } from 'react';
@@ -123,7 +121,7 @@ function Sidebar({ profile }: any) {
                   <div
                     onClick={async () => {
                       // await logout();
-                      await signOut(auth);
+                      // await signOut(auth);
                       // router.push("/auth/login");
                     }}
                     className='border border-neutral-500 rounded-sm p-2
