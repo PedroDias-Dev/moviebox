@@ -9,12 +9,6 @@
     "lint": "next lint",
     "prepare": "husky install"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn concurrently -r \"yarn lint\" \"yarn tsc --noEmit --skipLibCheck\"",
-      "post-merge": "yarn"
-    }
-  },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
     "@radix-ui/react-alert-dialog": "^1.0.4",
