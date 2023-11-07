@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 
 interface AuthRouteProps {
@@ -16,22 +16,19 @@ let ROUTES = {
 };
 
 function AuthRoute({ type, children }: AuthRouteProps) {
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  React.useEffect(() => {
-    console.log('AuthRoute', user);
-    const userData = user?.data;
-
-    if (!userData && type !== 'no-auth') {
+  useEffect(() => {
+    if (!session && type !== 'no-auth') {
       router.push(ROUTES.noAuth);
       setLoading(false);
       return;
     }
 
-    if (userData) {
-      const isAdmin = ['group_owner', 'admin'].includes(userData?.profile_type);
+    if (session && user) {
+      const isAdmin = ['admin'].includes(user?.profile_type);
       if (type === 'admin' && !isAdmin) {
         router.push(ROUTES.common);
         setLoading(false);
@@ -40,11 +37,13 @@ function AuthRoute({ type, children }: AuthRouteProps) {
 
       if (type === 'admin' && isAdmin) return setLoading(false);
 
-      router.push(ROUTES.common);
+      if (type === 'common') return setLoading(false);
+
+      // router.push(ROUTES.common);
     }
 
     setLoading(false);
-  }, [user]);
+  }, [session]);
 
   return <>{!loading && children}</>;
 }

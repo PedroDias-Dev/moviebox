@@ -51,7 +51,7 @@ function Users() {
           </h1>
         </div>
 
-        <div className='w-full h-[calc(100vh-80px)] rounded-t-lg bg-primary-750 p-5'>
+        <div className='w-full h-[calc(100vh-80px)] rounded-t-lg bg-neutral-750 p-5'>
           <UsersMenu page={page} setPage={setPage} refresh={refresh} setRefresh={setRefresh} />
 
           <Suspense fallback={<UsersLoading />}>

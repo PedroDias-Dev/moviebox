@@ -7,16 +7,16 @@ const Loading = () => {
   return (
     <div className='col-span-1 flex flex-col'>
       <div className='p-5'>
-        <Skeleton className='w-[300px] h-[40px] rounded-md' />
+        <Skeleton className='w-[300px] h-[40px] rounded-sm' />
       </div>
 
-      <div className='w-full h-[calc(100vh-80px)] rounded-t-lg bg-primary-800 p-5'>
+      <div className='w-full h-[calc(100vh-80px)] rounded-t-lg bg-neutral-800 p-5'>
         <Transition duration={0.3}>
           <div className='col-span-1 p-5 flex flex-col gap-3'>
-            <Skeleton className='w-[100%] h-[53px] rounded-md' />
-            <Skeleton className='w-[100%] h-[53px] rounded-md' />
-            <Skeleton className='w-[100%] h-[53px] rounded-md' />
-            <Skeleton className='w-[100%] h-[53px] rounded-md' />
+            <Skeleton className='w-[100%] h-[53px] rounded-sm' />
+            <Skeleton className='w-[100%] h-[53px] rounded-sm' />
+            <Skeleton className='w-[100%] h-[53px] rounded-sm' />
+            <Skeleton className='w-[100%] h-[53px] rounded-sm' />
           </div>
         </Transition>
       </div>

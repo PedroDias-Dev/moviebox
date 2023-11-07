@@ -2,9 +2,7 @@ import { useLoading } from '@/components/global/loading/loading';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { firestore } from '@/libs/firebase';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -36,14 +34,10 @@ const Account = ({ nextStep }: any) => {
 
     const { full_name, email, phone } = values;
 
-    const q = query(collection(firestore, 'users'), where('email', '==', email), limit(1));
+    const users = [] as any;
 
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.size > 0) {
-      const user = querySnapshot.docs[0].data() as any;
-
-      if (user.email === email) {
+    if (users.length > 0) {
+      if (users.find((item: any) => item.email === email)) {
         setLoading(false);
         return form.setError('email', {
           type: 'manual',
@@ -90,22 +84,8 @@ const Account = ({ nextStep }: any) => {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name='phone'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>And your phone number?</FormLabel>
-                <FormControl>
-                  <Input placeholder='Insert a phone number' mask={'(99) 99999-9999'} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           <div className='flex justify-between items-center'>
-            <Link className='text-sm text-primary-100 hover:text-primary-200' href='/auth/login'>
+            <Link className='text-sm text-neutral-100 hover:text-neutral-200' href='/auth/login'>
               Already have an account?
             </Link>
 

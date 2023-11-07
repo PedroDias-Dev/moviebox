@@ -10,7 +10,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { user } = useAuth();
 
   return (
-    <AuthRoute type='common'>
+    // <AuthRoute type='common'>
       <PageTransition>
         <div className='flex h-screen w-screen bg-secondary-900'>
           <Sidebar profile={user?.data} />
@@ -18,6 +18,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className='overflow-y-auto w-full'>{children}</div>
         </div>
       </PageTransition>
-    </AuthRoute>
+    // </AuthRoute>
   );
 }

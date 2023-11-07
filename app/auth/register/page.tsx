@@ -4,13 +4,8 @@ import { useLoading } from '@/components/global/loading/loading';
 import { useToast } from '@/components/ui/use-toast';
 import { useState } from 'react';
 import Account from './steps/account';
-import Group from './steps/group';
-import Championships from './steps/championships';
-import { KeyRound, PartyPopper, Trophy, Users } from 'lucide-react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, firestore } from '@/libs/firebase';
+import { KeyRound, PartyPopper } from 'lucide-react';
 import Privacy from './steps/privacy';
-import { addDoc, collection } from 'firebase/firestore';
 import { useAuth } from '@/hooks/useAuth';
 
 // import { useRouter } from "next/router";
@@ -23,20 +18,6 @@ const steps = [
     titleText: 'We are happy to have you here',
     description: 'Fill the form bellow to get started.',
     component: (props: any) => <Account {...props} />
-  },
-  {
-    title: 'Group Information',
-    icon: <Users size={32} />,
-    titleText: 'Who do you wanna play with?',
-    description: 'Create a group for you and your friends',
-    component: (props: any) => <Group {...props} />
-  },
-  {
-    title: 'Championships and Leagues',
-    icon: <Trophy size={32} />,
-    titleText: 'What are you betting on?',
-    description: 'Choose your favorite championships and leagues',
-    component: (props: any) => <Championships {...props} />
   },
   {
     title: 'Password and Terms',
@@ -61,46 +42,11 @@ function Register() {
     const { full_name, email, phone, password, group_name, users, championships } = data;
 
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
+      // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-      const userRef = collection(firestore, 'users');
-      const groupRef = collection(firestore, 'groups');
-      const inviteRef = collection(firestore, 'invites');
-
-      const group = await addDoc(groupRef, {
-        name: group_name,
-        championships
-      });
-
-      for (let user of users) {
-        const new_user = await addDoc(userRef, {
-          email: user.email,
-          pre_register: false,
-          profile_type: 'user'
-        });
-
-        // await addDoc(inviteRef, {
-        //   owner_name: full_name,
-        //   user_email: user.email,
-        //   group_id: group.id,
-        //   user_id: new_user.id
-        // });
-      }
-
-      await addDoc(userRef, {
-        uid: user.user.uid,
-        full_name,
-        email,
-        phone,
-        group_id: group.id,
-        profile_type: 'group_owner'
-      });
-
-      setLoading(false);
-
-      setTimeout(() => {
-        refresh();
-      }, 2000);
+      // setTimeout(() => {
+      //   refresh(userCredential);
+      // }, 2000);
     } catch (e) {
       setLoading(false);
       toast({
@@ -129,12 +75,12 @@ function Register() {
     <div className='h-full flex flex-col justify-between gap-7 transition-all'>
       <div className='flex flex-col gap-1'>
         <span className='text-sm'>
-          <strong className='text-primary-200'>{step}</strong> / {steps.length}
+          <strong className='text-neutral-200'>{step}</strong> / {steps.length}
         </span>
-        <h3 className='text-3xl font-bold flex gap-2'>
+        <h3 className='text-[38px] font-black flex gap-2 items-center'>
           {currentStep.titleText} {currentStep.icon}
         </h3>
-        <h3 className='text-sm text-secondary-200'>{currentStep.description}</h3>
+        <span className='text-sm text-secondary-200'>{currentStep.description}</span>
       </div>
 
       <div className='h-full flex-col justify-between'>

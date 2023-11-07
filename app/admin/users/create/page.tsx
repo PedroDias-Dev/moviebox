@@ -84,7 +84,7 @@ const UserCreate = () => {
         <h1 className='text-4xl font-extrabold'>Create a User</h1>
       </div>
 
-      <div className='w-full h-screen rounded-t-lg bg-primary-800 p-5'>
+      <div className='w-full h-screen rounded-t-lg bg-neutral-800 p-5'>
         <div className='w-full flex flex-col justify-center items-center'>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-1/3'>
@@ -165,7 +165,7 @@ const UserCreate = () => {
                 <AlertDescription>
                   All users must be associated with a group. If you don't have any group, you can create one{' '}
                   <Link href='/admin/groups/create'>
-                    <span className='text-primary-200'>here</span>
+                    <span className='text-neutral-200'>here</span>
                   </Link>
                 </AlertDescription>
               </Alert>

@@ -1,23 +1,53 @@
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 
-function Dashboard() {
+export default function Home() {
   return (
-    <div className='col-span-1 p-5 flex flex-col gap-6'>
-      <h1 className='text-4xl font-extrabold'>Dashboard</h1>
-
-      <div className='grid grid-cols-[2fr_1fr_1fr] gap-3'>
-        <Skeleton className='w-[100%] h-[253px] rounded-md' />
-        <Skeleton className='w-[100%] h-[253px] rounded-md' />
-        <Skeleton className='w-[100%] h-[253px] rounded-md' />
+    <main className='flex min-h-screen flex-col p-5 gap-6'>
+      <div className='flex flex-col'>
+        <h1 className='text-[44px] font-[900]'>MOVIEBOX</h1>
+        <h3 className='text-[16px] font-light italic'>
+          <strong>很少的想法:</strong> Научих от Учителя на Учителите, че изкуството да мислиш е съкровището на мъдрия.
+          Научих се малко повече да мисля преди да реагирам, да изразявам - а не да налагам - идеите си и да разбирам,
+          че всеки човек е уникално същество на сцената на съществуване.
+        </h3>
       </div>
 
-      <div className='grid grid-cols-[1fr_3fr_2fr] gap-3'>
-        <Skeleton className='w-[100%] h-[253px] rounded-md' />
-        <Skeleton className='w-[100%] h-[253px] rounded-md' />
-        <Skeleton className='w-[100%] h-[253px] rounded-md' />
+      <Separator />
+
+      <div className='flex gap-2 max-w-[500px]'>
+        <Button type='submit' variant='outline'>
+          Pesquisar
+        </Button>
       </div>
-    </div>
+
+      <div className='flex flex-col gap-3'>
+        <span className='text-[18px]'>Mais Populares</span>
+
+        <div className='flex gap-2 overflow-x-auto'>
+          {Array.from(Array(5)).map(e => (
+            <div className='flex flex-col gap-3 p-4 min-w-[200px] rounded border-solid border-zinc-700 border-2 transition-all hover:bg-zinc-700'>
+              <div className='flex flex-col gap-1'>
+                <span className='text-[16px] font-[700]'>MALOU RATAO 3</span>
+                <p className='text-[12px] font-light'>Ele está de volta, a ratazana mais querida ....</p>
+              </div>
+
+              <div className='flex gap-1'></div>
+            </div>
+          ))}
+        </div>
+
+        <div className='flex flex-col gap-3'>
+          <Skeleton className='w-full h-[70px] rounded' />
+          <Skeleton className='w-full h-[70px] rounded' />
+          <Skeleton className='w-full h-[70px] rounded' />
+          <Skeleton className='w-full h-[70px] rounded' />
+          <Skeleton className='w-full h-[70px] rounded' />
+          <Skeleton className='w-full h-[70px] rounded' />
+        </div>
+      </div>
+    </main>
   );
 }
-
-export default Dashboard;

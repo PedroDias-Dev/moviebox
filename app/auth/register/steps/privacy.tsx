@@ -81,7 +81,7 @@ const Privacy = ({ nextStep, previousStep }: any) => {
                     <Checkbox id='terms' checked={field.value} onCheckedChange={field.onChange} />
                     <span className='text-sm cursor-pointer text-white'>
                       Please accept our{' '}
-                      <strong className='cursor-pointer text-primary-200'>Terms and Conditions</strong>
+                      <strong className='cursor-pointer text-neutral-200'>Terms and Conditions</strong>
                     </span>
                   </div>
                 </FormControl>

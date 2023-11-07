@@ -1,52 +1,85 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { auth, firestore } from '@/libs/firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useToast } from '@/components/ui/use-toast';
+import { useRouter } from 'next/navigation';
 
 interface AuthContextProps {
+  session: any;
   user: any;
   loading: boolean;
-  refresh: () => void;
+  refresh: (newUser: any) => void;
+  signIn: (email: any, password: any) => void;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps>({
+  session: null,
   user: null,
   loading: true,
-  refresh: () => {}
+  refresh: () => {},
+  signIn: () => {},
+  logout: () => {}
 });
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: any) => {
-  const [user, loading] = useAuthState(auth) as any;
+  const router = useRouter();
+
+  const { toast } = useToast();
   const [userData, setUserData] = useState<any>(null);
+  const [session, setSession] = useState<any>(typeof window !== 'undefined' && localStorage.getItem('token')) as any;
 
   useEffect(() => {
-    getData();
-  }, [user, loading]);
+    if (typeof window !== 'undefined') {
+      setSession(localStorage.getItem('token'));
+    }
+  }, []);
 
-  const getData = () => {
-    if (user) {
-      const userRef = query(collection(firestore, 'users'), where('uid', '==', user.uid));
-      getDocs(userRef).then((snapshot: any) => {
-        const data = snapshot?.docs[0]?.data();
-        // console.log(user)
-        // console.log(data)
+  useEffect(() => {
+    getData(false);
+  }, [session]);
 
-        setUserData({ data, ...user });
-      });
-    } else {
-      setUserData(null);
+  const getData = async (newUser: any) => {
+    if (session?.valid) {
+      if (newUser) return setUserData(newUser);
+      try {
+        // setUserData({
+        //   ...users,
+        //   user_group_id: user_group?.id,
+        //   group: groups[0]?.groups?.name,
+        //   championships: groups.map((group: any) => group.championships)
+        // });
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'There was an error while processing your data, please try again later.'
+        });
+
+        logout();
+      }
     }
   };
 
-  const contextValue = {
-    user: userData,
-    loading,
-    refresh: getData
+  const signIn = (email: any, password: any) => {
+    console.log(email, password);
   };
 
-  return <AuthContext.Provider value={contextValue}>{!loading && children}</AuthContext.Provider>;
+  const logout = async () => {
+    setUserData(null);
+    router.push('/auth/login');
+  };
+
+  const contextValue = {
+    session,
+    user: userData,
+    loading: false,
+    refresh: (newUser: any) => getData(newUser),
+    signIn,
+    logout
+  };
+
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
