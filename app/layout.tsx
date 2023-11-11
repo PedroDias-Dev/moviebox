@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <head>
-        <link rel='icon' href='/assets/icon.svg' />
+        <link rel='icon' href='/assets/film-reel.svg' />
         <title key='title'>{metadata.title as any}</title>
       </head>
       <body className={inter.className}>

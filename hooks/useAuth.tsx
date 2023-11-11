@@ -34,67 +34,63 @@ export const AuthProvider = ({ children }: any) => {
   const { setLoading } = useLoading();
 
   const [userData, setUserData] = useState<any>(null);
-  const [session, setSession] = useState<any>(typeof window !== 'undefined' && localStorage.getItem('token')) as any;
+  const [session, setSession] = useState<any>(
+    typeof window !== 'undefined' && {
+      accessToken: localStorage.getItem('token')
+    }
+  ) as any;
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setSession(localStorage.getItem('token'));
+      setSession({
+        accessToken: localStorage.getItem('token')
+      });
     }
   }, []);
 
   useEffect(() => {
-    getData(false);
-  }, [session]);
+    if (session) {
+      getData(false);
+    }
+  }, []);
 
   const getData = async (newUser: any) => {
-    if (session?.valid) {
-      if (newUser) return setUserData(newUser);
-      try {
-        // setUserData({
-        //   ...users,
-        //   user_group_id: user_group?.id,
-        //   group: groups[0]?.groups?.name,
-        //   championships: groups.map((group: any) => group.championships)
-        // });
-      } catch (error) {
-        toast({
-          variant: 'destructive',
-          title: 'Atenção!',
-          description: 'Houve um erro ao processar suas informações. Por favor, tente novamente mais tarde.'
-        });
+    if (newUser) return setUserData(newUser);
+    try {
+      api.get('/api/v1/profile').then((res: any) => {
+        console.log(res);
+        setUserData(res.data);
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: 'destructive',
+        title: 'Atenção!',
+        description: 'Houve um erro ao processar suas informações. Por favor, tente novamente mais tarde.'
+      });
 
-        logout();
-      }
+      // logout();
     }
   };
 
-  const signIn = async (email: any, password: any) => {
+  const signIn = async (accessToken: any) => {
     setLoading(true);
 
-    const { data } = await api
-      .post('/api/v1/auth/login', {
-        email,
-        password
-      })
-      .catch(() => {
-        setLoading(false);
-        toast({
-          variant: 'destructive',
-          title: 'Atenção!',
-          description: 'As credenciais informadas estão incorretas. Por favor, tente novamente.'
-        });
+    if (accessToken) {
+      localStorage.setItem('token', accessToken);
+      setSession({
+        valid: true,
+        accessToken
       });
-
-    if (data?.accessToken) {
-      localStorage.setItem('token', data.accessToken);
-      setSession(data.accessToken);
       router.push('/app/movies');
-      setLoading(false);
+      window.location.reload();
     }
   };
 
   const logout = async () => {
     setUserData(null);
+    setSession(null);
+    localStorage.removeItem('token');
     router.push('/auth/login');
   };
 

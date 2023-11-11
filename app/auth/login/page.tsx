@@ -4,6 +4,7 @@ import { useLoading } from '@/components/global/loading/loading';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
+import { useApi } from '@/hooks/useApi';
 import { useAuth } from '@/hooks/useAuth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
@@ -25,11 +26,32 @@ function Login() {
   const { errors } = formState;
 
   const { signIn } = useAuth();
+  const { api } = useApi();
+  const { toast } = useToast();
+  const { setLoading } = useLoading();
 
   const onSubmit = async ({ email, password }: any) => {
     if (errors) console.log(errors);
 
-    await signIn(email, password);
+    setLoading(true);
+
+    try {
+      const { data } = await api.post('/api/v1/auth/login', {
+        email,
+        password
+      });
+
+      if (data.accessToken) {
+        await signIn(data.accessToken);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast({
+        variant: 'destructive',
+        title: 'Atenção!',
+        description: 'As credenciais informadas estão incorretas. Por favor, tente novamente.'
+      });
+    }
   };
 
   return (

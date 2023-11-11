@@ -9,12 +9,15 @@ import { variants } from './variants';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Clapperboard, LogOut, Popcorn, StarHalf, User } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 const Path = (props: any) => (
   <path fill='transparent' strokeWidth='3' stroke='white' strokeLinecap='round' {...props} />
 );
 
-function Sidebar({ profile, logout }: any) {
+function Sidebar({ profile }: any) {
+  const { logout } = useAuth();
+
   const router = useRouter();
   const [open, cycleOpen] = useCycle(false, true);
 
@@ -106,11 +109,8 @@ function Sidebar({ profile, logout }: any) {
               <div className='col-span-1 flex flex-col gap-5'>
                 <div className='flex flex-col gap-1'>
                   <h2 className='text-xl font-bold'>
-                    {!profile?.full_name ? <Skeleton className='w-[100%] h-[23px] rounded-md' /> : profile?.full_name}
+                    {!profile?.fullName ? <Skeleton className='w-[100%] h-[23px] rounded-md' /> : profile?.fullName}
                   </h2>
-                  <h3 className='text-sm text-neutral-300'>
-                    {!profile?.group ? <Skeleton className='w-[100%] h-[23px] rounded-md' /> : profile?.group}
-                  </h3>
                 </div>
 
                 <Separator />
