@@ -5,28 +5,28 @@ import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from
 import { useToast } from '@/components/ui/use-toast';
 import { useRef } from 'react';
 
-import UsersRow from './row';
+import MoviesRow from './row';
 
-const UsersTable = ({ data, setSelectedUser, getData }: any) => {
+const MoviesTable = ({ data, setSelectedMovie, getData }: any) => {
   const { toast } = useToast();
   const triggerRef = useRef(null) as any;
 
-  const deleteUser = async () => {
+  const deleteMovie = async () => {
     try {
       // delete user
 
       toast({
         variant: 'success',
-        title: 'Success',
-        description: 'User deleted successfully.'
+        title: 'Successo!',
+        description: 'Filme deletado com sucesso.'
       });
 
       getData();
     } catch (error) {
       toast({
         variant: 'destructive',
-        title: 'Atenção',
-        description: 'Something went wrong, please try again.'
+        title: 'Atenção!',
+        description: 'Houve um erro ao deletar o filme. Por favor, tente novamente.'
       });
     }
   };
@@ -34,27 +34,25 @@ const UsersTable = ({ data, setSelectedUser, getData }: any) => {
   return (
     <>
       <Table>
-        <TableCaption>A list of all users - {data.length} total users.</TableCaption>
+        <TableCaption>Todos os filmes - {data.length} filmes totais.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className='w-[100px]'>ID</TableHead>
             {/* <TableHead>Image</TableHead> */}
-            <TableHead>Name</TableHead>
-            <TableHead>E-mail</TableHead>
-            <TableHead>Phone</TableHead>
+            <TableHead>Título</TableHead>
             <TableHead>Criado em</TableHead>
-            <TableHead className='text-right'>Actions</TableHead>
+            <TableHead className='text-right'>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.map(async (user: any, index: number) => (
-            <UsersRow
+            <MoviesRow
               key={index}
-              user={user}
+              movie={user}
               index={index}
-              setSelectedUser={setSelectedUser}
+              setSelectedMovie={setSelectedMovie}
               triggerRef={triggerRef}
-              deleteUser={deleteUser}
+              deleteMovie={deleteMovie}
             />
           ))}
         </TableBody>
@@ -65,4 +63,4 @@ const UsersTable = ({ data, setSelectedUser, getData }: any) => {
   );
 };
 
-export default UsersTable;
+export default MoviesTable;

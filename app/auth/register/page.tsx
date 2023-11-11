@@ -57,7 +57,7 @@ function Register() {
       setLoading(false);
       toast({
         variant: 'destructive',
-        title: 'Error',
+        title: 'Atenção',
         description: 'Invalid email or password, please try again.'
       });
     }

@@ -20,7 +20,7 @@ interface UsersMenuProps {
   page: number;
 }
 
-const UsersMenu = ({ setPage, setRefresh, refresh, page }: UsersMenuProps) => {
+const MoviesMenu = ({ setPage, setRefresh, refresh, page }: UsersMenuProps) => {
   const router = useRouter();
 
   return (
@@ -32,13 +32,11 @@ const UsersMenu = ({ setPage, setRefresh, refresh, page }: UsersMenuProps) => {
           <MenubarContent>
             <MenubarItem
               onClick={() => {
-                router.push('/admin/users/create');
+                router.push('/admin/movies/create');
               }}
             >
-              New User
+              Novo Filme
             </MenubarItem>
-            <MenubarSeparator />
-            <MenubarItem>Export</MenubarItem>
           </MenubarContent>
         </Transition>
       </MenubarMenu>
@@ -84,4 +82,4 @@ const UsersMenu = ({ setPage, setRefresh, refresh, page }: UsersMenuProps) => {
   );
 };
 
-export default UsersMenu;
+export default MoviesMenu;

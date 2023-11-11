@@ -30,20 +30,20 @@ function Sidebar({ profile }: any) {
       href: '/admin/dashboard'
     },
     {
-      title: 'Users',
+      title: 'Usuários',
       href: '/admin/users/list'
     },
     {
-      title: 'Matches',
-      href: '/admin/matches'
+      title: 'Filmes',
+      href: '/admin/movies/list'
     },
     {
-      title: 'Leagues',
-      href: '/admin/leagues'
+      title: 'Séries',
+      href: '/admin/shows/list'
     },
     {
-      title: 'Regions',
-      href: '/admin/regions'
+      title: 'Reviews',
+      href: '/admin/reviews/list'
     }
   ];
 

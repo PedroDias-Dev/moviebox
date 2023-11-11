@@ -52,8 +52,8 @@ const UserCreate = () => {
     } catch (error) {
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: 'Something went wrong.'
+        title: 'Atenção',
+        description: 'Houve um erro ao processar seu pedido. Tente novamente.'
       });
     }
   };

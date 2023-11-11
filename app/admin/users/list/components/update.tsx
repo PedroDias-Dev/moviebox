@@ -66,7 +66,7 @@ const UsersUpdate = ({ selectedUser, getData }: any) => {
 
       toast({
         variant: 'destructive',
-        title: 'Error',
+        title: 'Atenção',
         description: 'Something went wrong, please try again.'
       });
     }

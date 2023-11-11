@@ -8,8 +8,10 @@ import UsersUpdate from './components/update';
 import UsersTable from './components/table';
 import UsersLoading from './components/loading';
 import { User } from 'lucide-react';
+import { useApi } from '@/hooks/useApi';
 
 function Users() {
+  const { api } = useApi();
   const [refresh, setRefresh] = useState(0);
   const [page, setPage] = useState(1);
 
@@ -30,7 +32,7 @@ function Users() {
         <div className='p-5'>
           <h1 className='text-4xl font-extrabold flex gap-2 items-center'>
             <User size={32} />
-            List All Users
+            Todos Usuários
           </h1>
         </div>
 
