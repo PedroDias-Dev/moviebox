@@ -6,9 +6,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input';
 import { SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { useToast } from '@/components/ui/use-toast';
-import { firestore } from '@/libs/firebase';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { doc, setDoc } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -45,17 +43,14 @@ const UsersUpdate = ({ selectedUser, getData }: any) => {
 
   const { setLoading } = useLoading();
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { full_name, email, phone } = values;
+  const onSubmit = async () => {
+    // const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // const { full_name, email, phone } = values;
 
     setLoading(true);
 
     try {
-      setDoc(doc(firestore, 'users', selectedUser.id), {
-        full_name,
-        email,
-        phone
-      });
+      // update user
 
       setLoading(false);
 

@@ -23,7 +23,7 @@ const SheetOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Overlay
     className={cn(
-      'absolute inset-0 z-50 bg-primary-800/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 dark:bg-primary-950/80',
+      'absolute inset-0 z-50 bg-neutral-800/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 dark:bg-neutral-950/80',
       className
     )}
     {...props}
@@ -33,7 +33,7 @@ const SheetOverlay = React.forwardRef<
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName;
 
 const sheetVariants = cva(
-  'absolute z-50 gap-4 bg-primary-750 p-6 shadow-lg transition-all ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500 dark:bg-primary-800',
+  'absolute z-50 gap-4 bg-neutral-750 p-6 shadow-lg transition-all ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500 dark:bg-neutral-800',
   {
     variants: {
       side: {
@@ -61,7 +61,7 @@ const SheetContent = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Con
       <SheetOverlay />
       <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
         {children}
-        <SheetPrimitive.Close className='absolute right-4 top-[1.6rem] rounded-sm opacity-70 ring-offset-primary-900 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-primary-100 dark:ring-offset-primary-950 dark:focus:ring-primary-800 dark:data-[state=open]:bg-primary-600'>
+        <SheetPrimitive.Close className='absolute right-4 top-[1.6rem] rounded-sm opacity-70 ring-offset-neutral-900 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-neutral-100 dark:ring-offset-neutral-950 dark:focus:ring-neutral-800 dark:data-[state=open]:bg-neutral-600'>
           <X className='h-4 w-4' />
           <span className='sr-only'>Close</span>
         </SheetPrimitive.Close>
@@ -87,7 +87,7 @@ const SheetTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Title
     ref={ref}
-    className={cn('text-lg font-semibold text-white dark:text-primary-50', className)}
+    className={cn('text-lg font-semibold text-white dark:text-neutral-50', className)}
     {...props}
   />
 ));
@@ -99,7 +99,7 @@ const SheetDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Description
     ref={ref}
-    className={cn('text-sm text-primary-500 dark:text-primary-400', className)}
+    className={cn('text-sm text-neutral-500 dark:text-neutral-400', className)}
     {...props}
   />
 ));

@@ -8,8 +8,6 @@ import UsersUpdate from './components/update';
 import UsersTable from './components/table';
 import UsersLoading from './components/loading';
 import { User } from 'lucide-react';
-import { collection, getDocs, limit, orderBy, query, startAt } from 'firebase/firestore';
-import { firestore } from '@/libs/firebase';
 
 function Users() {
   const [refresh, setRefresh] = useState(0);
@@ -23,22 +21,7 @@ function Users() {
   }, [refresh]);
 
   const getUsers = async () => {
-    let q;
-
-    if (page === 1) {
-      q = query(collection(firestore, 'users'), orderBy('createdAt', 'desc'), limit(10));
-    } else {
-      q = query(collection(firestore, 'users'), orderBy('createdAt', 'desc'), startAt(users[9]), limit(10));
-    }
-
-    getDocs(q).then((querySnapshot): any => {
-      setUsers(
-        querySnapshot.docs.map((doc: any) => ({
-          id: doc.id,
-          ...doc.data()
-        }))
-      );
-    });
+    setUsers([]);
   };
 
   return (
@@ -51,7 +34,7 @@ function Users() {
           </h1>
         </div>
 
-        <div className='w-full h-[calc(100vh-80px)] rounded-t-lg bg-primary-750 p-5'>
+        <div className='w-full h-[calc(100vh-80px)] rounded-t-lg bg-neutral-750 p-5'>
           <UsersMenu page={page} setPage={setPage} refresh={refresh} setRefresh={setRefresh} />
 
           <Suspense fallback={<UsersLoading />}>

@@ -11,7 +11,7 @@ import { AuthProvider } from '@/hooks/useAuth';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Teambet',
+  title: 'Moviebox',
   description: 'Login'
 };
 

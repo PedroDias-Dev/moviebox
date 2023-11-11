@@ -1,19 +1,21 @@
 'use client';
 
 import { Separator } from '@/components/ui/separator';
-import { auth } from '@/libs/firebase';
-import { signOut } from 'firebase/auth';
 import { animate, AnimatePresence, motion, useCycle } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
 import { variants } from './variants';
+import { useRouter } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
+import { BarChart, LogOut, Trophy, User } from 'lucide-react';
 
 const Path = (props: any) => (
   <path fill='transparent' strokeWidth='3' stroke='white' strokeLinecap='round' {...props} />
 );
 
-function Sidebar({ profile }: any) {
+function Sidebar({ profile, logout }: any) {
+  const router = useRouter();
   const [open, cycleOpen] = useCycle(false, true);
 
   useEffect(() => {
@@ -26,30 +28,25 @@ function Sidebar({ profile }: any) {
 
   const items = [
     {
-      title: 'Matches',
+      title: 'Movies & Series',
+      icon: <BarChart size={24} />,
+      href: '/app/media'
+    },
+    {
+      title: 'Your Reviews',
+      icon: <Trophy size={24} />,
       href: '/app/matches'
     },
     {
-      title: 'Ranking',
-      href: '/app/ranking'
-    },
-    {
       title: 'Profile',
+      icon: <User size={24} />,
       href: '/app/profile'
-    },
-    ...(['group_owner', 'admin'].includes(profile?.profile_type)
-      ? [
-          {
-            title: 'Admin',
-            href: '/admin/dashboard'
-          }
-        ]
-      : [])
+    }
   ];
 
   return (
-    <div className='col-span-1 bg-primary-600 p-5 flex flex-col gap-5 h-full drop-shadow-lg'>
-      <div className='btn-container'>
+    <div className='col-span-1 bg-neutral-600 p-5 flex flex-col gap-5 h-full drop-shadow-lg tablet:!h-[58px] tablet:!p-0 tablet:!gap-0 tablet:!relative tablet:!z-20'>
+      <div className='btn-container tablet:!p-5 flex items-center'>
         <button title='a' onClick={cycleOpen as any}>
           <svg width='23' height='18' viewBox='0 0 23 18'>
             <Path
@@ -75,7 +72,8 @@ function Sidebar({ profile }: any) {
       <AnimatePresence>
         {open && (
           <motion.aside
-            initial={{ width: 20, height: '100%' }}
+            className='h-full'
+            initial={{ width: 20 }}
             animate={{
               width: 300,
               transition: { duration: 0.4 }
@@ -86,6 +84,7 @@ function Sidebar({ profile }: any) {
             }}
           >
             <motion.div
+              className='h-full flex flex-col justify-between tablet:!w-screen tablet:h-[calc(100vh-58px)] tablet:!bg-neutral-600 tablet:!p-[15px]'
               initial={{
                 opacity: 0
               }}
@@ -99,9 +98,14 @@ function Sidebar({ profile }: any) {
               }}
               variants={variants.sideVariants}
             >
-              <div className='col-span-1 flex flex-col gap-5 h-full'>
+              <div className='col-span-1 flex flex-col gap-5'>
                 <div className='flex flex-col gap-1'>
-                  <h2 className='text-xl font-bold'>{profile?.full_name}</h2>
+                  <h2 className='text-xl font-bold'>
+                    {!profile?.full_name ? <Skeleton className='w-[100%] h-[23px] rounded-md' /> : profile?.full_name}
+                  </h2>
+                  <h3 className='text-sm text-neutral-300'>
+                    {!profile?.group ? <Skeleton className='w-[100%] h-[23px] rounded-md' /> : profile?.group}
+                  </h3>
                 </div>
 
                 <Separator />
@@ -110,26 +114,31 @@ function Sidebar({ profile }: any) {
                   {items.map((item, index) => (
                     <div
                       key={index}
-                      className='border border-primary-500
-                      rounded-md p-2 transition-all hover:pl-2 cursor-pointer hover:bg-primary-700'
+                      className='border border-neutral-500
+                      rounded-md p-2 transition-all hover:pl-2 cursor-pointer hover:bg-neutral-700'
+                      onClick={cycleOpen as any}
                     >
                       <Link passHref={true} prefetch={false} href={item.href}>
-                        <h2 className='text-xl font-bold'>{item.title}</h2>
+                        <div className='flex gap-2 items-center'>
+                          {item.icon}
+                          <h2 className='text-xl font-bold'>{item.title}</h2>
+                        </div>
                       </Link>
                     </div>
                   ))}
-
-                  <div
-                    onClick={async () => {
-                      // await logout();
-                      await signOut(auth);
-                      // router.push("/auth/login");
-                    }}
-                    className='border border-primary-500 rounded-md p-2
-                    transition-all hover:pl-2 cursor-pointer hover:bg-primary-700'
-                  >
-                    <h2 className='text-xl font-bold'>Logout</h2>
-                  </div>
+                </div>
+              </div>
+              <div
+                onClick={async () => {
+                  logout();
+                  router.refresh();
+                }}
+                className='border border-neutral-500 rounded-md p-2
+                    transition-all hover:pl-2 cursor-pointer hover:bg-neutral-700'
+              >
+                <div className='flex gap-2 items-center'>
+                  <LogOut size={24} />
+                  <h2 className='text-xl font-bold'>Logout</h2>
                 </div>
               </div>
             </motion.div>

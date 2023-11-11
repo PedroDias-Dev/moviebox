@@ -3,8 +3,6 @@
 import { SheetTrigger } from '@/components/ui/sheet';
 import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/components/ui/use-toast';
-import { firestore } from '@/libs/firebase';
-import { deleteDoc, doc } from 'firebase/firestore';
 import { useRef } from 'react';
 
 import UsersRow from './row';
@@ -13,10 +11,9 @@ const UsersTable = ({ data, setSelectedUser, getData }: any) => {
   const { toast } = useToast();
   const triggerRef = useRef(null) as any;
 
-  const deleteUser = async (id: any) => {
+  const deleteUser = async () => {
     try {
-      const docRef = doc(firestore, 'users', id);
-      await deleteDoc(docRef);
+      // delete user
 
       toast({
         variant: 'success',

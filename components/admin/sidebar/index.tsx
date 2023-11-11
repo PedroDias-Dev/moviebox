@@ -1,8 +1,6 @@
 'use client';
 
 import { Separator } from '@/components/ui/separator';
-import { auth } from '@/libs/firebase';
-import { signOut } from 'firebase/auth';
 import { animate, AnimatePresence, motion, useCycle } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect } from 'react';
@@ -48,7 +46,7 @@ function Sidebar({ profile }: any) {
   ];
 
   return (
-    <div className='col-span-1 bg-primary-600 p-5 flex flex-col gap-5 h-full drop-shadow-lg'>
+    <div className='col-span-1 bg-neutral-600 p-5 flex flex-col gap-5 h-full drop-shadow-lg'>
       <div className='btn-container'>
         <button title='a' onClick={cycleOpen as any}>
           <svg width='23' height='18' viewBox='0 0 23 18'>
@@ -102,7 +100,7 @@ function Sidebar({ profile }: any) {
               <div className='col-span-1 flex flex-col gap-5 h-full'>
                 <div className='flex flex-col gap-1'>
                   <h2 className='text-xl font-bold'>{profile?.full_name}</h2>
-                  <p className='text-sm'>TeamBet Admin</p>
+                  <p className='text-sm'>Moviebox Admin</p>
                 </div>
 
                 <Separator />
@@ -111,8 +109,8 @@ function Sidebar({ profile }: any) {
                   {items.map((item, index) => (
                     <div
                       key={index}
-                      className='border border-primary-500
-                      rounded-md p-2 transition-all hover:pl-2 cursor-pointer hover:bg-primary-700'
+                      className='border border-neutral-500
+                      rounded-sm p-2 transition-all hover:pl-2 cursor-pointer hover:bg-neutral-700'
                     >
                       <Link passHref={true} prefetch={false} href={item.href}>
                         <h2 className='text-xl font-bold'>{item.title}</h2>
@@ -123,11 +121,11 @@ function Sidebar({ profile }: any) {
                   <div
                     onClick={async () => {
                       // await logout();
-                      await signOut(auth);
+                      // await signOut(auth);
                       // router.push("/auth/login");
                     }}
-                    className='border border-primary-500 rounded-md p-2
-                    transition-all hover:pl-2 cursor-pointer hover:bg-primary-700'
+                    className='border border-neutral-500 rounded-sm p-2
+                    transition-all hover:pl-2 cursor-pointer hover:bg-neutral-700'
                   >
                     <h2 className='text-xl font-bold'>Logout</h2>
                   </div>
