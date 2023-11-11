@@ -11,7 +11,7 @@ interface AuthRouteProps {
 
 let ROUTES = {
   admin: '/admin/dashboard',
-  common: '/app/dashboard',
+  common: '/app/movies',
   noAuth: '/auth/login'
 };
 

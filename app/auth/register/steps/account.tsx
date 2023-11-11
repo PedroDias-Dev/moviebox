@@ -1,22 +1,29 @@
 import { useLoading } from '@/components/global/loading/loading';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/libs/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CalendarIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { format } from 'date-fns';
 
 const Account = ({ nextStep }: any) => {
   const { setLoading } = useLoading();
 
   const formSchema = z.object({
     full_name: z.string().min(5, {
-      message: 'Name must be at least 5 characters.'
+      message: 'O nome precisa ter pelo menos 5 caracteres.'
     }),
-    email: z.string().email(),
-    phone: z.string().min(10, {
-      message: 'Phone must be at least 10 characters.'
+    email: z.string().email({
+      message: 'O e-mail precisa ser válido.'
+    }),
+    birth_date: z.date().min(new Date('1900-01-01'), {
+      message: 'A data de nascimento precisa ser válida.'
     })
   });
 
@@ -25,29 +32,16 @@ const Account = ({ nextStep }: any) => {
     defaultValues: {
       full_name: '',
       email: '',
-      phone: ''
+      birth_date: new Date('2000-01-01')
     }
   });
 
   const checkEmail = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
 
-    const { full_name, email, phone } = values;
+    const { full_name, email } = values;
 
-    const users = [] as any;
-
-    if (users.length > 0) {
-      if (users.find((item: any) => item.email === email)) {
-        setLoading(false);
-        return form.setError('email', {
-          type: 'manual',
-          message: 'This e-mail is already registered in the platform.'
-        });
-      }
-    }
-
-    setLoading(false);
-    nextStep({ full_name, email, phone });
+    nextStep({ full_name, email });
   };
 
   return (
@@ -59,11 +53,13 @@ const Account = ({ nextStep }: any) => {
             name='full_name'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>What's your name?</FormLabel>
+                <FormLabel>Qual é seu nome?</FormLabel>
                 <FormControl>
-                  <Input placeholder='Insert your full name' {...field} />
+                  <Input placeholder='Digite seu nome completo, ou um nickname' {...field} />
                 </FormControl>
-                <FormDescription>This will be your public display name inside the platform</FormDescription>
+                <FormDescription>
+                  Este será o nome que aparecerá para os outros usuários dentro da plataforma.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -74,11 +70,46 @@ const Account = ({ nextStep }: any) => {
             name='email'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>What's your best e-mail?</FormLabel>
+                <FormLabel>Qual é seu melhor e-mail?</FormLabel>
                 <FormControl>
-                  <Input placeholder='Insert a e-mail' {...field} />
+                  <Input placeholder='Digite um e-mail' {...field} />
                 </FormControl>
-                <FormDescription>Please insert a valid e-mail</FormDescription>
+                <FormDescription>
+                  Por favor, insira um e-mail válido, pois ele será usado para entrar na plataforma.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='birth_date'
+            render={({ field }) => (
+              <FormItem className='flex flex-col'>
+                <FormLabel>Data de Nascimento</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={'outline'}
+                        className={cn('w-full pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}
+                      >
+                        {field.value ? format(field.value, 'PPP') : <span>Selecione sua data de nascimento</span>}
+                        <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className='w-auto p-0' align='start'>
+                    <Calendar
+                      mode='single'
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={date => date > new Date() || date < new Date('1900-01-01')}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
                 <FormMessage />
               </FormItem>
             )}
@@ -86,11 +117,11 @@ const Account = ({ nextStep }: any) => {
 
           <div className='flex justify-between items-center'>
             <Link className='text-sm text-neutral-100 hover:text-neutral-200' href='/auth/login'>
-              Already have an account?
+              Já tem uma conta?
             </Link>
 
             <Button type='submit' variant='default' size='lg'>
-              Next
+              Próximo
             </Button>
           </div>
         </form>

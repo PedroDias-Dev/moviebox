@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { variants } from './variants';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BarChart, LogOut, Trophy, User } from 'lucide-react';
+import { Clapperboard, LogOut, Popcorn, StarHalf, User } from 'lucide-react';
 
 const Path = (props: any) => (
   <path fill='transparent' strokeWidth='3' stroke='white' strokeLinecap='round' {...props} />
@@ -28,17 +28,22 @@ function Sidebar({ profile, logout }: any) {
 
   const items = [
     {
-      title: 'Movies & Series',
-      icon: <BarChart size={24} />,
-      href: '/app/media'
+      title: 'Filmes',
+      icon: <Clapperboard size={24} />,
+      href: '/app/movies'
     },
     {
-      title: 'Your Reviews',
-      icon: <Trophy size={24} />,
-      href: '/app/matches'
+      title: 'Séries',
+      icon: <Popcorn size={24} />,
+      href: '/app/shows'
     },
     {
-      title: 'Profile',
+      title: 'Suas Avaliações',
+      icon: <StarHalf size={24} />,
+      href: '/app/reviews'
+    },
+    {
+      title: 'Perfil',
       icon: <User size={24} />,
       href: '/app/profile'
     }

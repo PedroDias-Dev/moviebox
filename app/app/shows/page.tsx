@@ -8,38 +8,38 @@ import { Separator } from '@/components/ui/separator';
 import { useApi } from '@/hooks/useApi';
 import { useEffect, useRef, useState } from 'react';
 
-export default function Movies() {
+export default function Shows() {
   const { api } = useApi();
-  const movieTrigger = useRef() as any;
+  const showTrigger = useRef() as any;
 
   const [search, setSearch] = useState('');
-  const [filteredMovies, setFilteredMovies] = useState([]);
-  const [movies, setMovies] = useState<any>({});
+  const [filteredShows, setFilteredShows] = useState([]);
+  const [shows, setShows] = useState<any>({});
 
-  const [selectedMovie, setSelectedMovie] = useState<any>(null);
+  const [selectedShow, setSelectedShow] = useState<any>(null);
 
   useEffect(() => {
     onSearch();
   }, [search]);
 
   useEffect(() => {
-    getMovies();
+    getShows();
   }, []);
 
-  const getMovies = async () => {
-    const { data } = await api.get('/api/v1/movies');
+  const getShows = async () => {
+    const { data } = await api.get('/api/v1/series');
 
     if (data) {
-      // filter movies by genre
+      // filter series by genre
       const filtered = [] as any;
 
-      data.map((movie: any) => {
-        if (!filtered[movie.genre]) filtered[movie.genre] = [];
+      data.map((show: any) => {
+        if (!filtered[show.genre]) filtered[show.genre] = [];
 
-        filtered[movie.genre].push(movie);
+        filtered[show.genre].push(show);
       });
 
-      setMovies(filtered);
+      setShows(filtered);
     }
   };
 
@@ -47,29 +47,29 @@ export default function Movies() {
     if (search) {
       const filtered = [] as any;
 
-      Object.keys(movies).map(key => {
-        const filteredMovies = movies[key].map((movie: any) => {
-          if (movie.name.toLowerCase().includes(search.toLowerCase())) filtered.push(movie);
+      Object.keys(shows).map(key => {
+        const filteredShows = shows[key].map((show: any) => {
+          if (show.name.toLowerCase().includes(search.toLowerCase())) filtered.push(show);
         });
 
-        return filteredMovies.length > 0;
+        return filteredShows.length > 0;
       });
 
-      setFilteredMovies(filtered);
+      setFilteredShows(filtered);
     } else {
-      setFilteredMovies(movies);
+      setFilteredShows(shows);
     }
   };
 
   return (
     <Dialog>
       <main className='flex min-h-screen flex-col p-5 gap-6'>
-        <Media media={selectedMovie} triggerRef={movieTrigger} mediaType='movies' />
+        <Media media={selectedShow} triggerRef={showTrigger} mediaType='series' />
 
         <div className='flex flex-col'>
-          <h1 className='text-[44px] font-[900]'>Filmes</h1>
+          <h1 className='text-[44px] font-[900]'>Séries</h1>
           <h3 className='text-[16px] font-light italic'>
-            Seus filmes favoritos, ou os que vocẽ mais odeia, estão aqui
+            Suas séries prediletas, ou as que vocẽ mais odeia, estão aqui
           </h3>
         </div>
 
@@ -85,19 +85,19 @@ export default function Movies() {
           />
         </div>
 
-        {filteredMovies.length > 0 ? (
+        {filteredShows.length > 0 ? (
           <div className='flex gap-2 flex-wrap'>
-            {filteredMovies.map((movie: any) => (
+            {filteredShows.map((show: any) => (
               <div
                 onClick={() => {
-                  setSelectedMovie(movie);
-                  movieTrigger.current.click();
+                  setSelectedShow(show);
+                  showTrigger.current.click();
                 }}
                 className='flex flex-col gap-3 p-4 min-w-[200px] rounded border-solid border-zinc-700 border-2 transition-all hover:bg-zinc-700 cursor-pointer'
               >
                 <div className='flex flex-col gap-1'>
-                  <span className='text-[16px] font-[700]'>{movie.name}</span>
-                  <p className='text-[12px] font-light'>{movie.description}</p>
+                  <span className='text-[16px] font-[700]'>{show.name}</span>
+                  <p className='text-[12px] font-light'>{show.description}</p>
                 </div>
 
                 <div className='flex gap-1'></div>
@@ -105,22 +105,22 @@ export default function Movies() {
             ))}
           </div>
         ) : (
-          Object.keys(movies).map(key => (
+          Object.keys(shows).map(key => (
             <div className='flex flex-col gap-3'>
               <span className='text-[18px]'>{key}</span>
 
               <div className='flex gap-2 overflow-x-auto'>
-                {movies[key].map((movie: any) => (
+                {shows[key].map((show: any) => (
                   <div
                     onClick={() => {
-                      setSelectedMovie(movie);
-                      movieTrigger.current.click();
+                      setSelectedShow(show);
+                      showTrigger.current.click();
                     }}
                     className='flex flex-col gap-3 p-4 min-w-[200px] rounded border-solid border-zinc-700 border-2 transition-all hover:bg-zinc-700 cursor-pointer'
                   >
                     <div className='flex flex-col gap-1'>
-                      <span className='text-[16px] font-[700]'>{movie.name}</span>
-                      <p className='text-[12px] font-light'>{movie.description}</p>
+                      <span className='text-[16px] font-[700]'>{show.name}</span>
+                      <p className='text-[12px] font-light'>{show.description}</p>
                     </div>
 
                     <div className='flex gap-1'></div>

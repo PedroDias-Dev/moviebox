@@ -36,7 +36,7 @@ export const LoadingProvider = ({ children }: any) => {
             <div className='fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center'>
               <svg
                 aria-hidden='true'
-                className='w-8 h-8 mr-2 text-green-200 animate-spin dark:text-gray-600 fill-green-600'
+                className='w-8 h-8 mr-2 text-neutral-200 animate-spin dark:text-gray-600 fill-neutral-600'
                 viewBox='0 0 100 101'
                 fill='none'
                 xmlns='http://www.w3.org/2000/svg'

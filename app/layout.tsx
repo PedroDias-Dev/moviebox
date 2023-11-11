@@ -8,6 +8,7 @@ import { Inter } from 'next/font/google';
 // eslint-disable-next-line prettier/prettier
 import type { Metadata } from 'next';
 import { AuthProvider } from '@/hooks/useAuth';
+import { ApiProvider } from '@/hooks/useApi';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -23,12 +24,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <title key='title'>{metadata.title as any}</title>
       </head>
       <body className={inter.className}>
-        <AuthProvider>
-          <Toaster />
-          <LoadingProvider>
-            <DialogProvider>{children}</DialogProvider>
-          </LoadingProvider>
-        </AuthProvider>
+        <ApiProvider>
+          <AuthProvider>
+            <Toaster />
+            <LoadingProvider>
+              <DialogProvider>{children}</DialogProvider>
+            </LoadingProvider>
+          </AuthProvider>
+        </ApiProvider>
       </body>
     </html>
   );
