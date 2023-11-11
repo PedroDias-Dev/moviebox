@@ -15,15 +15,15 @@ const steps = [
   {
     title: 'Personal Information',
     icon: <PartyPopper size={32} />,
-    titleText: 'We are happy to have you here',
-    description: 'Fill the form bellow to get started.',
+    titleText: 'Estamos felizes de te ver aqui!',
+    description: 'Preencha os campos abaixo para criar sua conta',
     component: (props: any) => <Account {...props} />
   },
   {
     title: 'Password and Terms',
     icon: <KeyRound size={32} />,
-    titleText: 'Finally, your password',
-    description: 'Use a strong password and accept our terms and conditions',
+    titleText: 'Finalmente, sua senha',
+    description: 'Use uma senha forte e aceite os nossos termos e condições',
     component: (props: any) => <Privacy {...props} />
   }
 ];
