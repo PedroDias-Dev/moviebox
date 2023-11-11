@@ -6,12 +6,14 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 
 import { variants } from './variants';
+import { useAuth } from '@/hooks/useAuth';
 
 const Path = (props: any) => (
   <path fill='transparent' strokeWidth='3' stroke='white' strokeLinecap='round' {...props} />
 );
 
 function Sidebar({ profile }: any) {
+  const { logout } = useAuth();
   const [open, cycleOpen] = useCycle(false, true);
 
   useEffect(() => {
@@ -99,7 +101,7 @@ function Sidebar({ profile }: any) {
             >
               <div className='col-span-1 flex flex-col gap-5 h-full'>
                 <div className='flex flex-col gap-1'>
-                  <h2 className='text-xl font-bold'>{profile?.full_name}</h2>
+                  <h2 className='text-xl font-bold'>{profile?.fullName}</h2>
                   <p className='text-sm'>Moviebox Admin</p>
                 </div>
 
@@ -120,9 +122,7 @@ function Sidebar({ profile }: any) {
 
                   <div
                     onClick={async () => {
-                      // await logout();
-                      // await signOut(auth);
-                      // router.push("/auth/login");
+                      logout();
                     }}
                     className='border border-neutral-500 rounded-sm p-2
                     transition-all hover:pl-2 cursor-pointer hover:bg-neutral-700'

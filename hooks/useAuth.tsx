@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }: any) => {
   const { toast } = useToast();
   const { setLoading } = useLoading();
 
+  const [loading, setLoadingState] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const [session, setSession] = useState<any>(
     typeof window !== 'undefined' && {
@@ -49,27 +50,31 @@ export const AuthProvider = ({ children }: any) => {
   }, []);
 
   useEffect(() => {
-    if (session) {
+    if (session.accessToken) {
       getData(false);
     }
   }, []);
 
   const getData = async (newUser: any) => {
+    setLoadingState(true);
+
     if (newUser) return setUserData(newUser);
     try {
-      api.get('/api/v1/profile').then((res: any) => {
-        console.log(res);
-        setUserData(res.data);
-      });
+      const { data } = await api.get('/api/v1/profile');
+
+      if (data) {
+        setUserData(data);
+        setLoadingState(false);
+      }
     } catch (error) {
-      console.log(error);
+      setLoadingState(false);
       toast({
         variant: 'destructive',
         title: 'Atenção!',
         description: 'Houve um erro ao processar suas informações. Por favor, tente novamente mais tarde.'
       });
 
-      // logout();
+      logout();
     }
   };
 
@@ -103,5 +108,5 @@ export const AuthProvider = ({ children }: any) => {
     logout
   };
 
-  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={contextValue}>{!loading && children}</AuthContext.Provider>;
 };

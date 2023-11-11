@@ -6,6 +6,8 @@ import { useState } from 'react';
 import Account from './steps/account';
 import { KeyRound, PartyPopper } from 'lucide-react';
 import Privacy from './steps/privacy';
+import { useApi } from '@/hooks/useApi';
+import { useAuth } from '@/hooks/useAuth';
 // import { useAuth } from '@/hooks/useAuth';
 
 // import { useRouter } from "next/router";
@@ -31,22 +33,26 @@ const steps = [
 function Register() {
   const { toast } = useToast();
   const { setLoading } = useLoading();
-  // const { refresh } = useAuth();
+  const { api } = useApi();
+  const { refresh } = useAuth();
 
   const [step, setStep] = useState(1);
   const [userData, setUserData] = useState({});
 
-  const onSubmit = async () => {
-    // const onSubmit = async (data: any) => {
+  const onSubmit = async (data: any) => {
     setLoading(true);
 
-    // const { full_name, email, phone, password, group_name, users, championships } = data;
+    const { full_name, email, birth_date, password } = data;
 
     try {
-      // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      // setTimeout(() => {
-      //   refresh(userCredential);
-      // }, 2000);
+      const { data } = await api.post('/api/v1/auth/login', {
+        fullName: full_name,
+        email,
+        password,
+        birthDate: birth_date
+      });
+
+      refresh(data);
     } catch (e) {
       setLoading(false);
       toast({

@@ -4,16 +4,16 @@ import PageTransition from '@/components/motion/PageTransition';
 import Sidebar from '@/components/admin/sidebar';
 
 import AuthRoute from '@/components/routes/AuthRoute';
-import { useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [profile] = useState<any>(null);
+  const { user } = useAuth();
 
   return (
     <AuthRoute type='admin'>
       <PageTransition>
         <div className='flex h-screen w-screen bg-secondary-900'>
-          <Sidebar profile={profile} />
+          <Sidebar profile={user} />
 
           <div className='overflow-y-auto w-full'>{children}</div>
         </div>

@@ -21,16 +21,31 @@ function AuthRoute({ type, children }: AuthRouteProps) {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(session, user);
     if (!session && type !== 'no-auth') {
+      console.log('invalid user');
       router.push(ROUTES.noAuth);
       setLoading(false);
       return;
     }
 
     if (session && user) {
-      const isAdmin = ['admin'].includes(user?.profile_type);
+      const isAdmin = user?.role === 'ADMIN';
+
+      if (type === 'no-auth') {
+        router.push(isAdmin ? ROUTES.admin : ROUTES.common);
+        setLoading(false);
+        return;
+      }
+
       if (type === 'admin' && !isAdmin) {
         router.push(ROUTES.common);
+        setLoading(false);
+        return;
+      }
+
+      if (type === 'common' && isAdmin) {
+        router.push(ROUTES.admin);
         setLoading(false);
         return;
       }
