@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext } from 'react';
 import axios from 'axios';
 
 interface ApiContextProps {
@@ -15,9 +15,13 @@ export const useApi = () => useContext(ApiContext);
 
 export const ApiProvider = ({ children }: any) => {
   const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: 'http://localhost:8080',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      ...(typeof window !== 'undefined' &&
+        localStorage.getItem('token') && {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        })
     }
   });
 

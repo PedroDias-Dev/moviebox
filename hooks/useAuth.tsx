@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
+import { useApi } from './useApi';
+import { useLoading } from '@/components/global/loading/loading';
 
 interface AuthContextProps {
   session: any;
@@ -27,7 +29,10 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }: any) => {
   const router = useRouter();
 
+  const { api } = useApi();
   const { toast } = useToast();
+  const { setLoading } = useLoading();
+
   const [userData, setUserData] = useState<any>(null);
   const [session, setSession] = useState<any>(typeof window !== 'undefined' && localStorage.getItem('token')) as any;
 
@@ -54,8 +59,8 @@ export const AuthProvider = ({ children }: any) => {
       } catch (error) {
         toast({
           variant: 'destructive',
-          title: 'Error',
-          description: 'There was an error while processing your data, please try again later.'
+          title: 'Atenção!',
+          description: 'Houve um erro ao processar suas informações. Por favor, tente novamente mais tarde.'
         });
 
         logout();
@@ -63,8 +68,29 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const signIn = (email: any, password: any) => {
-    console.log(email, password);
+  const signIn = async (email: any, password: any) => {
+    setLoading(true);
+
+    const { data } = await api
+      .post('/api/v1/auth/login', {
+        email,
+        password
+      })
+      .catch(() => {
+        setLoading(false);
+        toast({
+          variant: 'destructive',
+          title: 'Atenção!',
+          description: 'As credenciais informadas estão incorretas. Por favor, tente novamente.'
+        });
+      });
+
+    if (data?.accessToken) {
+      localStorage.setItem('token', data.accessToken);
+      setSession(data.accessToken);
+      router.push('/app/movies');
+      setLoading(false);
+    }
   };
 
   const logout = async () => {

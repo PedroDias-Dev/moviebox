@@ -25,29 +25,11 @@ function Login() {
   const { errors } = formState;
 
   const { signIn } = useAuth();
-  const { toast } = useToast();
-  const router = useRouter();
-  const { setLoading } = useLoading();
 
   const onSubmit = async ({ email, password }: any) => {
     if (errors) console.log(errors);
 
-    setLoading(true);
-
-    try {
-      await signIn(email, password);
-
-      setLoading(false);
-
-      router.push('/app/dashboard');
-    } catch (e) {
-      setLoading(false);
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Invalid email or password, please try again.'
-      });
-    }
+    await signIn(email, password);
   };
 
   return (
@@ -55,32 +37,32 @@ function Login() {
       <div className='h-full flex flex-col gap-8'>
         <div className='flex flex-col gap-1'>
           <h3 className='text-[38px] font-black flex gap-2 items-center'>Moviebox</h3>
-          <span className='text-sm text-secondary-200'>Login to your account</span>
+          <span className='text-sm text-secondary-200'>Entre em sua conta</span>
         </div>
         <div className='h-full'>
           <form onSubmit={handleSubmit(onSubmit)} className='h-full flex flex-col justify-between'>
             <div className='flex flex-col gap-6'>
               <div className='flex flex-col gap-1'>
                 <label className='block' htmlFor='email'>
-                  Email
+                  E-mail
                 </label>
-                <Input type='text' {...register('email')} placeholder='Email' />
+                <Input type='text' {...register('email')} placeholder='E-mail' />
               </div>
               <div className='flex flex-col gap-1'>
-                <label className='block'>Password</label>
-                <Input type='password' {...register('password')} placeholder='Password' />
+                <label className='block'>Senha</label>
+                <Input type='password' {...register('password')} placeholder='Senha' />
               </div>
             </div>
             <div className='flex items-baseline justify-between mt-8 gap-2'>
               <Button variant='link' asChild>
                 <Link href='/auth/register' className='text-sm hover:underline'>
-                  Don't have an account?
+                  Não possui uma conta?
                 </Link>
               </Button>
 
               <Button disabled={formState.isSubmitting} variant='default' size='lg'>
                 {formState.isSubmitting && <span className='spinner-border spinner-border-sm me-1'></span>}
-                Login
+                Entrar
               </Button>
             </div>
           </form>
