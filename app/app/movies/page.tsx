@@ -117,11 +117,13 @@ export default function Movies() {
                 />
                 <div className='flex flex-col h-full justify-between'>
                   <div className='flex flex-col gap-1'>
-                    <span className='text-[16px] font-[700]'>{movie.name}</span>
+                    <span className='text-[16px] font-[700] max-w-[180px]'>{movie.name}</span>
                     <p className='text-[12px] font-light'>{movie.description}</p>
                   </div>
 
-                  <span className='text-[12px] font-[700]'>{movie.year}</span>
+                  <span className='text-[12px] font-[700]'>
+                    {movie.year} - {movie.director}
+                  </span>
                 </div>
               </div>
             ))}
@@ -129,7 +131,10 @@ export default function Movies() {
         ) : (
           Object.keys(movies).map(key => (
             <div className='flex flex-col gap-3'>
-              <strong>{key}</strong> <span className='text-[13px] text-neutral-400'>{movies[key].length} filme(s)</span>
+              <span className='text-[18px]'>
+                <strong>{key}</strong>{' '}
+                <span className='text-[13px] text-neutral-400'>{movies[key].length} filme(s)</span>
+              </span>
               <div className='flex gap-2 overflow-x-auto'>
                 {movies[key].map((movie: any) => (
                   <div
@@ -149,11 +154,12 @@ export default function Movies() {
                     />
                     <div className='flex flex-col h-full justify-between'>
                       <div className='flex flex-col gap-1'>
-                        <span className='text-[16px] font-[700]'>{movie.name}</span>
-                        <p className='text-[12px] font-light'>{movie.description}</p>
+                        <span className='text-[16px] font-[700] max-w-[180px]'>{movie.name}</span>
                       </div>
 
-                      <span className='text-[12px] font-[700]'>{movie.year}</span>
+                      <span className='text-[12px] font-[700]'>
+                        {movie.year} - {movie.director}
+                      </span>
                     </div>
                   </div>
                 ))}

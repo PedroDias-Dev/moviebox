@@ -30,12 +30,22 @@ const UserCreate = () => {
     director: z.string().min(5, {
       message: 'O diretor deve ter no mínimo 5 caracteres.'
     }),
-    year: z.string().min(4, {
-      message: 'O ano deve ter no mínimo 4 caracteres.'
-    }),
-    duration: z.string().min(2, {
-      message: 'A duração deve ter no mínimo 2 caracteres.'
-    })
+    year: z
+      .string()
+      .min(4, {
+        message: 'O ano deve ter no mínimo 4 caracteres.'
+      })
+      .regex(/^[0-9]+$/, {
+        message: 'O ano deve ser um número.'
+      }),
+    duration: z
+      .string()
+      .min(2, {
+        message: 'A duração deve ter no mínimo 2 caracteres.'
+      })
+      .regex(/^[0-9]+:[0-9]+$/, {
+        message: 'A duração deve estar no formato 00:00'
+      })
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -198,7 +208,7 @@ const UserCreate = () => {
                   <FormItem>
                     <FormLabel>Ano</FormLabel>
                     <FormControl>
-                      <Input placeholder='Insira um ano' {...field} />
+                      <Input type='number' placeholder='Insira um ano' {...field} />
                     </FormControl>
                     <FormDescription>Insira um ano válido para o filme</FormDescription>
                     <FormMessage />

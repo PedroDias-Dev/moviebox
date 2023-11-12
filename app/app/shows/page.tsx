@@ -106,11 +106,13 @@ export default function Shows() {
                 />
                 <div className='flex flex-col h-full justify-between'>
                   <div className='flex flex-col gap-1'>
-                    <span className='text-[16px] font-[700]'>{show.name}</span>
+                    <span className='text-[16px] font-[700] max-w-[180px]'>{show.name}</span>
                     <p className='text-[12px] font-light'>{show.description}</p>
                   </div>
 
-                  <span className='text-[12px] font-[700]'>{show.year}</span>
+                  <span className='text-[12px] font-[700]'>
+                    {show.year} - {show.director}
+                  </span>
                 </div>
               </div>
             ))}
@@ -142,11 +144,13 @@ export default function Shows() {
                     />
                     <div className='flex flex-col h-full justify-between'>
                       <div className='flex flex-col gap-1'>
-                        <span className='text-[16px] font-[700]'>{show.name}</span>
+                        <span className='text-[16px] font-[700] max-w-[180px]'>{show.name}</span>
                         <p className='text-[12px] font-light'>{show.description}</p>
                       </div>
 
-                      <span className='text-[12px] font-[700]'>{show.year}</span>
+                      <span className='text-[12px] font-[700]'>
+                        {show.year} - {show.director}
+                      </span>
                     </div>
                   </div>
                 ))}

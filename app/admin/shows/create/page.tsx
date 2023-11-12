@@ -33,12 +33,22 @@ const ShowCreate = () => {
     year: z.string().min(4, {
       message: 'O ano deve ter no mínimo 4 caracteres.'
     }),
-    episodes: z.string().min(1, {
-      message: 'A série deve ter no mínimo 1 episódio.'
-    }),
-    seasons: z.string().min(1, {
-      message: 'A série deve ter no mínimo 1 temporada.'
-    })
+    episodes: z
+      .string()
+      .min(1, {
+        message: 'A série deve ter no mínimo 1 episódio.'
+      })
+      .regex(/^[0-9]+$/, {
+        message: 'O número de episódios deve ser um número.'
+      }),
+    seasons: z
+      .string()
+      .min(1, {
+        message: 'A série deve ter no mínimo 1 temporada.'
+      })
+      .regex(/^[0-9]+$/, {
+        message: 'O número de temporadas deve ser um número.'
+      })
   });
 
   const form = useForm<z.infer<typeof formSchema>>({

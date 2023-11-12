@@ -30,7 +30,27 @@ export default function Reviews() {
       const { data } = await api.get('/api/v1/user/ratings');
 
       if (data) {
-        setReviews(data);
+        const all = [] as any;
+
+        for (let movie of data.movies) {
+          all.push({
+            ...movie,
+            media: movie.movie.name,
+            mediaId: movie.movie.id,
+            mediaType: 'movies'
+          });
+        }
+
+        for (let serie of data.series) {
+          all.push({
+            ...serie,
+            media: serie.serie.name,
+            mediaId: serie.serie.id,
+            mediaType: 'series'
+          });
+        }
+
+        setReviews(all);
       }
     } catch {
       toast({
@@ -41,8 +61,8 @@ export default function Reviews() {
     }
   };
 
-  const deleteRating = async (ratingId: any) => {
-    // await api.delete(`/api/v1/${mediaType}/${media?.id}/ratings/${ratingId}`);
+  const deleteRating = async (rating: any) => {
+    await api.delete(`/api/v1/${rating?.mediaType}/${rating?.mediaId}/ratings/${rating.id}`);
 
     getReviews();
 
@@ -63,19 +83,16 @@ export default function Reviews() {
       <Separator />
 
       <div className='flex flex-col gap-2 items-center'>
+        {reviews.length === 0 && (
+          <p className='text-[16px] text-neutral-400 text-center italic w-full max-w-[600px]'>
+            Você ainda não avaliou nenhum filme ou série. <br /> Que tal começar agora?
+          </p>
+        )}
         {reviews.map((review: any) => (
           <div className='flex w-full max-w-[600px] flex-col gap-4'>
             <div className='flex flex-col gap-3 p-3 bg-neutral-700 rounded-sm'>
               <div className='flex justify-between w-full'>
-                <div className='flex flex-col'>
-                  <h3>{review?.user}</h3>
-                  <span className='text-[13px]'>
-                    {Intl.DateTimeFormat('pt-BR', { day: 'numeric', month: 'long' }).format(
-                      new Date(review?.createdAt)
-                    )}
-                  </span>
-                </div>
-
+                <h1 className='text-[16px] font-bold text-neutral-100'>{review?.media}</h1>
                 {review.userId === user?.id && (
                   <Trash
                     stroke='red'
@@ -83,13 +100,20 @@ export default function Reviews() {
                       addDialog({
                         title: 'Deletar review?',
                         description: 'Tem certeza que deseja deletar esta review? Essa ação não pode ser desfeita.',
-                        onContinue: () => deleteRating(review?.id)
+                        onContinue: () => deleteRating(review)
                       });
                     }}
                     className='cursor-pointer'
                     size={20}
                   />
                 )}
+              </div>
+
+              <div className='flex flex-col'>
+                <h3>{review?.user}</h3>
+                <span className='text-[13px]'>
+                  {Intl.DateTimeFormat('pt-BR', { day: 'numeric', month: 'long' }).format(new Date(review?.createdAt))}
+                </span>
               </div>
 
               <div className='flex gap-2'>
@@ -107,8 +131,6 @@ export default function Reviews() {
               </div>
 
               <p>{review?.comment}</p>
-
-              <h1 className='text-[12px] font-bold text-neutral-100'>{review?.media}</h1>
             </div>
           </div>
         ))}
