@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-const UserCreate = () => {
+const ShowCreate = () => {
   const { toast } = useToast();
   const { api } = useApi();
 
@@ -33,8 +33,11 @@ const UserCreate = () => {
     year: z.string().min(4, {
       message: 'O ano deve ter no mínimo 4 caracteres.'
     }),
-    duration: z.string().min(2, {
-      message: 'A duração deve ter no mínimo 2 caracteres.'
+    episodes: z.string().min(1, {
+      message: 'A série deve ter no mínimo 1 episódio.'
+    }),
+    seasons: z.string().min(1, {
+      message: 'A série deve ter no mínimo 1 temporada.'
     })
   });
 
@@ -47,28 +50,30 @@ const UserCreate = () => {
       cover: '',
       director: '',
       year: '',
-      duration: ''
+      episodes: '',
+      seasons: ''
     }
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { name, description, genre, cover, director, duration, year } = values;
+    const { name, description, genre, cover, director, episodes, seasons, year } = values;
 
     try {
-      await api.post('/api/v1/movies', {
+      await api.post('/api/v1/series', {
         name,
         description,
         genre,
         cover,
         director,
-        duration,
+        seasons,
+        episodes,
         year
       });
 
       toast({
         variant: 'success',
         title: 'Sucesso!',
-        description: 'Filme criado com sucesso.'
+        description: 'Série criado com sucesso.'
       });
 
       form.reset();
@@ -84,7 +89,7 @@ const UserCreate = () => {
   return (
     <div className='col-span-1 flex flex-col'>
       <div className='p-5'>
-        <h1 className='text-4xl font-extrabold'>Criar um Filme</h1>
+        <h1 className='text-4xl font-extrabold'>Criar uma Série</h1>
       </div>
 
       <div className='w-full h-full rounded-t-lg bg-neutral-800 p-5'>
@@ -100,7 +105,7 @@ const UserCreate = () => {
                     <FormControl>
                       <Input placeholder='Insira um nome' {...field} />
                     </FormControl>
-                    <FormDescription>Insira um nome válido para o filme</FormDescription>
+                    <FormDescription>Insira um nome válido para a série</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -115,7 +120,7 @@ const UserCreate = () => {
                     <FormControl>
                       <Input placeholder='Insira uma descrição' {...field} />
                     </FormControl>
-                    <FormDescription>Insira uma descrição válida para o filme</FormDescription>
+                    <FormDescription>Insira uma descrição válida para a série</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -170,7 +175,7 @@ const UserCreate = () => {
                     <FormControl>
                       <Input placeholder='Insira uma capa' {...field} />
                     </FormControl>
-                    <FormDescription>Insira uma capa válida para o filme</FormDescription>
+                    <FormDescription>Insira uma capa válida para a série</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -185,7 +190,7 @@ const UserCreate = () => {
                     <FormControl>
                       <Input placeholder='Insira um diretor' {...field} />
                     </FormControl>
-                    <FormDescription>Insira um diretor válido para o filme</FormDescription>
+                    <FormDescription>Insira um diretor válido para a série</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -200,7 +205,7 @@ const UserCreate = () => {
                     <FormControl>
                       <Input placeholder='Insira um ano' {...field} />
                     </FormControl>
-                    <FormDescription>Insira um ano válido para o filme</FormDescription>
+                    <FormDescription>Insira um ano válido para a série</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -208,14 +213,29 @@ const UserCreate = () => {
 
               <FormField
                 control={form.control}
-                name='duration'
+                name='seasons'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Duração</FormLabel>
+                    <FormLabel>Temporadas</FormLabel>
                     <FormControl>
-                      <Input placeholder='Insira uma duração' {...field} />
+                      <Input placeholder='Insira um número de temporadas' {...field} />
                     </FormControl>
-                    <FormDescription>Insira uma duração válida para o filme</FormDescription>
+                    <FormDescription>Insira um número de temporadas válido para a série</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='episodes'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Episódios</FormLabel>
+                    <FormControl>
+                      <Input placeholder='Insira um número de episódios' {...field} />
+                    </FormControl>
+                    <FormDescription>Insira um número de episódios válido para a série</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -230,4 +250,4 @@ const UserCreate = () => {
   );
 };
 
-export default UserCreate;
+export default ShowCreate;
