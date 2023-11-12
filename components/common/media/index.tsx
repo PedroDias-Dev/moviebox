@@ -11,11 +11,13 @@ import { Button } from '@/components/ui/button';
 import { Star, Trash } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/hooks/useAuth';
+import { useDialog } from '@/components/global/dialog/dialog';
 
 export const Media = ({ media = {}, triggerRef, mediaType }: { media: any; triggerRef: any; mediaType: string }) => {
   const { api } = useApi();
   const { user } = useAuth();
   const { toast } = useToast();
+  const { addDialog } = useDialog();
 
   const formSchema = z.object({
     comment: z.string().min(5, {
@@ -195,7 +197,14 @@ export const Media = ({ media = {}, triggerRef, mediaType }: { media: any; trigg
                       {rating.userId === user?.id && (
                         <Trash
                           stroke='red'
-                          onClick={() => deleteRating(rating?.id)}
+                          onClick={() => {
+                            addDialog({
+                              title: 'Deletar review?',
+                              description:
+                                'Tem certeza que deseja deletar esta review? Essa ação não pode ser desfeita.',
+                              onContinue: () => deleteRating(rating?.id)
+                            });
+                          }}
                           className='cursor-pointer'
                           size={20}
                         />
