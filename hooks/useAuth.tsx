@@ -11,7 +11,7 @@ interface AuthContextProps {
   user: any;
   loading: boolean;
   refresh: (newUser: any) => void;
-  signIn: (email: any, password: any) => void;
+  signIn: (accessToken: any) => void;
   logout: () => void;
 }
 
@@ -52,6 +52,8 @@ export const AuthProvider = ({ children }: any) => {
   useEffect(() => {
     if (session.accessToken) {
       getData(false);
+    } else {
+      logout();
     }
   }, []);
 
@@ -67,14 +69,13 @@ export const AuthProvider = ({ children }: any) => {
         setLoadingState(false);
       }
     } catch (error) {
+      logout();
       setLoadingState(false);
       toast({
         variant: 'destructive',
         title: 'Atenção!',
         description: 'Houve um erro ao processar suas informações. Por favor, tente novamente mais tarde.'
       });
-
-      logout();
     }
   };
 

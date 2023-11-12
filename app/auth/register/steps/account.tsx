@@ -37,11 +37,9 @@ const Account = ({ nextStep }: any) => {
   });
 
   const checkEmail = async (values: z.infer<typeof formSchema>) => {
-    setLoading(true);
+    const { full_name, email, birth_date } = values;
 
-    const { full_name, email } = values;
-
-    nextStep({ full_name, email });
+    nextStep({ full_name, email, birth_date });
   };
 
   return (

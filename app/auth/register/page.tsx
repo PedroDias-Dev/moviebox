@@ -34,7 +34,7 @@ function Register() {
   const { toast } = useToast();
   const { setLoading } = useLoading();
   const { api } = useApi();
-  const { refresh } = useAuth();
+  const { signIn } = useAuth();
 
   const [step, setStep] = useState(1);
   const [userData, setUserData] = useState({});
@@ -45,14 +45,16 @@ function Register() {
     const { full_name, email, birth_date, password } = data;
 
     try {
-      const { data } = await api.post('/api/v1/auth/login', {
+      const { data } = await api.post('/api/v1/auth/register', {
         fullName: full_name,
         email,
         password,
         birthDate: birth_date
       });
 
-      refresh(data);
+      if (data) {
+        signIn(data.accessToken);
+      }
     } catch (e) {
       setLoading(false);
       toast({
@@ -68,7 +70,7 @@ function Register() {
     setUserData(data);
 
     if (step === steps.length) {
-      return onSubmit();
+      return onSubmit(data);
     }
 
     setStep(step + 1);

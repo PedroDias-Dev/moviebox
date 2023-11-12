@@ -29,7 +29,7 @@ function AuthRoute({ type, children }: AuthRouteProps) {
       return;
     }
 
-    if (session && user) {
+    if (session?.accessToken && user) {
       const isAdmin = user?.role === 'ADMIN';
 
       if (type === 'no-auth') {
@@ -53,8 +53,6 @@ function AuthRoute({ type, children }: AuthRouteProps) {
       if (type === 'admin' && isAdmin) return setLoading(false);
 
       if (type === 'common') return setLoading(false);
-
-      // router.push(ROUTES.common);
     }
 
     setLoading(false);

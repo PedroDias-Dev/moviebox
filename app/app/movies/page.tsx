@@ -5,11 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/components/ui/use-toast';
 import { useApi } from '@/hooks/useApi';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Movies() {
   const { api } = useApi();
+  const { toast } = useToast();
+
   const movieTrigger = useRef() as any;
 
   const [search, setSearch] = useState('');
@@ -27,19 +30,27 @@ export default function Movies() {
   }, []);
 
   const getMovies = async () => {
-    const { data } = await api.get('/api/v1/movies');
+    try {
+      const { data } = await api.get('/api/v1/movies');
 
-    if (data) {
-      // filter movies by genre
-      const filtered = [] as any;
+      if (data) {
+        // filter movies by genre
+        const filtered = [] as any;
 
-      data.map((movie: any) => {
-        if (!filtered[movie.genre]) filtered[movie.genre] = [];
+        data.map((movie: any) => {
+          if (!filtered[movie.genre]) filtered[movie.genre] = [];
 
-        filtered[movie.genre].push(movie);
+          filtered[movie.genre].push(movie);
+        });
+
+        setMovies(filtered);
+      }
+    } catch {
+      toast({
+        variant: 'destructive',
+        title: 'Atenção!',
+        description: 'Houve um erro ao processar suas informações. Por favor, tente novamente mais tarde.'
       });
-
-      setMovies(filtered);
     }
   };
 
