@@ -1,23 +1,30 @@
 'use client';
 
+import Select from '@/components/global/form/select/select';
 import { useLoading } from '@/components/global/loading/loading';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { useToast } from '@/components/ui/use-toast';
+import { useApi } from '@/hooks/useApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-const MoviesUpdate = ({ selectedUser, getData }: any) => {
+const MoviesUpdate = ({ selectedMovie, getData }: any) => {
+  const { api } = useApi();
+
   const formSchema = z.object({
     name: z.string().min(5, {
       message: 'O título deve ter no mínimo 5 caracteres.'
     }),
     description: z.string().min(10, {
       message: 'A descrição deve ter no mínimo 10 caracteres.'
+    }),
+    genre: z.string().min(5, {
+      message: 'O gênero deve ter no mínimo 5 caracteres.'
     }),
     cover: z.string().min(5, {
       message: 'A capa deve ter no mínimo 5 caracteres.'
@@ -34,44 +41,50 @@ const MoviesUpdate = ({ selectedUser, getData }: any) => {
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema)
-    // defaultValues: {
-    //   full_name: selectedUser?.full_name,
-    //   email: selectedUser?.email,
-    //   phone: selectedUser?.phone
-    // }
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      genre: selectedMovie?.genre
+    }
   });
 
   useEffect(() => {
     form.reset({
-      name: selectedUser?.name,
-      description: selectedUser?.description,
-      cover: selectedUser?.cover,
-      director: selectedUser?.director,
-      year: selectedUser?.year,
-      duration: selectedUser?.duration
+      name: selectedMovie?.name,
+      description: selectedMovie?.description,
+      genre: selectedMovie?.genre,
+      cover: selectedMovie?.cover,
+      director: selectedMovie?.director,
+      year: selectedMovie?.year,
+      duration: selectedMovie?.duration
     });
-  }, [selectedUser]);
+  }, [selectedMovie]);
 
   const { toast } = useToast();
 
   const { setLoading } = useLoading();
 
-  const onSubmit = async () => {
-    // const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // const { full_name, email, phone } = values;
-
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
 
+    const { name, description, genre, cover, director, duration, year } = values;
+
     try {
-      // update user
+      await api.put('/api/v1/movies/' + selectedMovie.id, {
+        name,
+        description,
+        genre,
+        cover,
+        director,
+        duration,
+        year
+      });
 
       setLoading(false);
 
       toast({
         variant: 'success',
-        title: 'Success',
-        description: 'User updated successfully.'
+        title: 'Sucesso!',
+        description: 'Filme atualizado com sucesso.'
       });
 
       getData();
@@ -81,7 +94,7 @@ const MoviesUpdate = ({ selectedUser, getData }: any) => {
       toast({
         variant: 'destructive',
         title: 'Atenção',
-        description: 'Something went wrong, please try again.'
+        description: 'Houve um erro ao processar seu pedido. Tente novamente.'
       });
     }
   };
@@ -126,6 +139,38 @@ const MoviesUpdate = ({ selectedUser, getData }: any) => {
                 </FormItem>
               )}
             />
+
+            {selectedMovie.genre && (
+              <FormField
+                control={form.control}
+                name='genre'
+                render={({ field }) => (
+                  <FormItem className='flex flex-col'>
+                    <FormLabel>Gênero</FormLabel>
+                    <FormControl>
+                      <Select
+                        form={form}
+                        field={field}
+                        name='group'
+                        placeholder='Selecione um gênero'
+                        options={[
+                          { value: 'HORROR', label: 'Horror' },
+                          { value: 'ROMANCE', label: 'Romance' },
+                          { value: 'ACTION', label: 'Action' },
+                          { value: 'ADVENTURE', label: 'Adventure' },
+                          { value: 'ANIMATION', label: 'Animation' },
+                          { value: 'DOCUMENTARY', label: 'Documentary' },
+                          { value: 'DRAMA', label: 'Drama' },
+                          { value: 'FANTASY', label: 'Fantasy' },
+                          { value: 'MUSIC', label: 'Music' }
+                        ]}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <FormField
               control={form.control}

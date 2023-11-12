@@ -1,15 +1,18 @@
 'use client';
 
+import Select from '@/components/global/form/select/select';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
+import { useApi } from '@/hooks/useApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 const UserCreate = () => {
   const { toast } = useToast();
+  const { api } = useApi();
 
   const formSchema = z.object({
     name: z.string().min(5, {
@@ -17,6 +20,9 @@ const UserCreate = () => {
     }),
     description: z.string().min(10, {
       message: 'A descrição deve ter no mínimo 10 caracteres.'
+    }),
+    genre: z.string().min(5, {
+      message: 'O gênero deve ter no mínimo 5 caracteres.'
     }),
     cover: z.string().min(5, {
       message: 'A capa deve ter no mínimo 5 caracteres.'
@@ -37,6 +43,7 @@ const UserCreate = () => {
     defaultValues: {
       name: '',
       description: '',
+      genre: '',
       cover: '',
       director: '',
       year: '',
@@ -44,20 +51,27 @@ const UserCreate = () => {
     }
   });
 
-  // const onSubmit = async (values: z.infer<typeof formSchema>) => {
-  const onSubmit = async () => {
-    // const { full_name, email, phone, group } = values;
-
-    // let group_id = 0;
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const { name, description, genre, cover, director, duration, year } = values;
 
     try {
-      // create user
+      await api.post('/api/v1/movies', {
+        name,
+        description,
+        genre,
+        cover,
+        director,
+        duration,
+        year
+      });
 
       toast({
         variant: 'success',
-        title: 'Successo!',
+        title: 'Sucesso!',
         description: 'Filme criado com sucesso.'
       });
+
+      form.reset();
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -102,6 +116,46 @@ const UserCreate = () => {
                       <Input placeholder='Insira uma descrição' {...field} />
                     </FormControl>
                     <FormDescription>Insira uma descrição válida para o filme</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* HORROR("HORROR"),
+                ROMANCE("ROMANCE"),
+                ACTION("ACTION"),
+                ADVENTURE("ADVENTURE"),
+                ANIMATION("ANIMATION"),
+                DOCUMENTARY("DOCUMENTARY"),
+                DRAMA("DRAMA"),
+                FANTASY("FANTASY"),
+                MUSIC("MUSIC"); */}
+
+              <FormField
+                control={form.control}
+                name='genre'
+                render={({ field }) => (
+                  <FormItem className='flex flex-col'>
+                    <FormLabel>Gênero</FormLabel>
+                    <FormControl>
+                      <Select
+                        form={form}
+                        field={field}
+                        name='group'
+                        placeholder='Selecione um gênero'
+                        options={[
+                          { value: 'HORROR', label: 'Horror' },
+                          { value: 'ROMANCE', label: 'Romance' },
+                          { value: 'ACTION', label: 'Action' },
+                          { value: 'ADVENTURE', label: 'Adventure' },
+                          { value: 'ANIMATION', label: 'Animation' },
+                          { value: 'DOCUMENTARY', label: 'Documentary' },
+                          { value: 'DRAMA', label: 'Drama' },
+                          { value: 'FANTASY', label: 'Fantasy' },
+                          { value: 'MUSIC', label: 'Music' }
+                        ]}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

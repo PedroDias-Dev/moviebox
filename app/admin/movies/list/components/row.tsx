@@ -27,6 +27,7 @@ const MoviesRow = ({ movie, index, setSelectedMovie, triggerRef, deleteMovie }: 
         </Avatar>
       </TableCell> */}
       <TableCell>{movie.name}</TableCell>
+      <TableCell>{movie.genre}</TableCell>
       <TableCell>{moment(movie.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
       <TableCell className='flex justify-end'>
         <Trash

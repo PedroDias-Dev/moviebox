@@ -8,6 +8,7 @@ import { cn } from '@/libs/utils';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 
 const Select = ({ form, name, options, field, placeholder }: any) => {
+  console.log(field)
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -34,9 +35,9 @@ const Select = ({ form, name, options, field, placeholder }: any) => {
                 value={option.label}
                 key={option.label}
                 onSelect={value => {
-                  const selected = options.find((option: any) => option.label.toLowerCase() === value.toLowerCase());
+                  const selected = options.find((option: any) => option.value.toLowerCase() === value.toLowerCase());
 
-                  form.setValue(name, selected.value);
+                  field.onChange(selected.value);
                 }}
               >
                 {option.label}

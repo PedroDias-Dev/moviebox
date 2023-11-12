@@ -6,18 +6,20 @@ import { useToast } from '@/components/ui/use-toast';
 import { useRef } from 'react';
 
 import MoviesRow from './row';
+import { useApi } from '@/hooks/useApi';
 
 const MoviesTable = ({ data, setSelectedMovie, getData }: any) => {
+  const { api } = useApi();
   const { toast } = useToast();
   const triggerRef = useRef(null) as any;
 
-  const deleteMovie = async () => {
+  const deleteMovie = async (movieId: any) => {
     try {
-      // delete user
+      await api.delete(`/api/v1/movies/${movieId}`);
 
       toast({
         variant: 'success',
-        title: 'Successo!',
+        title: 'Sucesso!',
         description: 'Filme deletado com sucesso.'
       });
 
@@ -40,6 +42,7 @@ const MoviesTable = ({ data, setSelectedMovie, getData }: any) => {
             <TableHead className='w-[100px]'>ID</TableHead>
             {/* <TableHead>Image</TableHead> */}
             <TableHead>Título</TableHead>
+            <TableHead>Gênero</TableHead>
             <TableHead>Criado em</TableHead>
             <TableHead className='text-right'>Ações</TableHead>
           </TableRow>

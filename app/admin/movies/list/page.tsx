@@ -49,7 +49,7 @@ function Movies() {
         </div>
       </div>
 
-      {selectedMovie && <MoviesUpdate getData={getMovies} selectedUser={selectedMovie} setRefresh={setRefresh} />}
+      {selectedMovie && <MoviesUpdate getData={getMovies} selectedMovie={selectedMovie} setRefresh={setRefresh} />}
     </Sheet>
   );
 }
