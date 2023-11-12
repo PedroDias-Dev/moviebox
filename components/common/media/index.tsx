@@ -8,11 +8,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { useEffect, useState } from 'react';
 import { useApi } from '@/hooks/useApi';
 import { Button } from '@/components/ui/button';
-import { Star } from 'lucide-react';
+import { Star, Trash } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 export const Media = ({ media = {}, triggerRef, mediaType }: { media: any; triggerRef: any; mediaType: string }) => {
   const { api } = useApi();
+  const { user } = useAuth();
   const { toast } = useToast();
 
   const formSchema = z.object({
@@ -70,6 +72,18 @@ export const Media = ({ media = {}, triggerRef, mediaType }: { media: any; trigg
     });
   };
 
+  const deleteRating = async (ratingId: any) => {
+    await api.delete(`/api/v1/${mediaType}/${media?.id}/ratings/${ratingId}`);
+
+    getRatings();
+
+    toast({
+      variant: 'success',
+      title: 'Sucesso!',
+      description: 'Sua avaliação foi deletada com sucesso.'
+    });
+  };
+
   return (
     <>
       <DialogTrigger ref={triggerRef} />
@@ -100,51 +114,53 @@ export const Media = ({ media = {}, triggerRef, mediaType }: { media: any; trigg
             </p>
 
             <div className='flex flex-col gap-2'>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(submit)} className='w-full flex flex-col gap-5'>
-                  <FormField
-                    control={form.control}
-                    name='comment'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Digite sua avaliação</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder='O que você achou desse filme/série?'
-                            className='resize-none'
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Cuidado com o que você escreve, pois todos os usuários poderão ver, nem todo mundo respeita a
-                          opinião dos outros...
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+              {!ratings.find((rating: any) => rating?.userId === user?.id) && (
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(submit)} className='w-full flex flex-col gap-5'>
+                    <FormField
+                      control={form.control}
+                      name='comment'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Digite sua avaliação</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder='O que você achou desse filme/série?'
+                              className='resize-none'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Cuidado com o que você escreve, pois todos os usuários poderão ver, nem todo mundo respeita
+                            a opinião dos outros...
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <div className='flex gap-2'>
-                    {Array.from(Array(5)).map((_, i) => (
-                      <div
-                        onClick={() => {
-                          setStars(i + 1);
-                          setStarError('');
-                        }}
-                        className='cursor-pointer'
-                      >
-                        {i + 1 <= stars ? (
-                          <Star stroke='#dfdfdf' fill='#dfdfdf' />
-                        ) : (
-                          <Star stroke='#6d6d6d' fill='#6d6d6d' />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  {starError && <p className='text-sm font-medium text-red-500 dark:text-red-900'>{starError}</p>}
-                  <Button type='submit'>Enviar</Button>
-                </form>
-              </Form>
+                    <div className='flex gap-2'>
+                      {Array.from(Array(5)).map((_, i) => (
+                        <div
+                          onClick={() => {
+                            setStars(i + 1);
+                            setStarError('');
+                          }}
+                          className='cursor-pointer'
+                        >
+                          {i + 1 <= stars ? (
+                            <Star stroke='#dfdfdf' fill='#dfdfdf' />
+                          ) : (
+                            <Star stroke='#6d6d6d' fill='#6d6d6d' />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    {starError && <p className='text-sm font-medium text-red-500 dark:text-red-900'>{starError}</p>}
+                    <Button type='submit'>Enviar</Button>
+                  </form>
+                </Form>
+              )}
 
               <span className='text-neutral-400 text-sm pt-3'>Avaliações</span>
 
@@ -155,9 +171,24 @@ export const Media = ({ media = {}, triggerRef, mediaType }: { media: any; trigg
               {ratings.map((rating: any) => (
                 <div className='flex flex-col gap-4'>
                   <div className='flex flex-col gap-3 p-3 bg-neutral-700 rounded-sm'>
-                    <div className='flex flex-col'>
-                      <h3>Mauricio</h3>
-                      <span className='text-[13px]'>18 de fevrero</span>
+                    <div className='flex justify-between w-full'>
+                      <div className='flex flex-col'>
+                        <h3>{rating?.user}</h3>
+                        <span className='text-[13px]'>
+                          {Intl.DateTimeFormat('pt-BR', { day: 'numeric', month: 'long' }).format(
+                            new Date(rating?.createdAt)
+                          )}
+                        </span>
+                      </div>
+
+                      {rating.userId === user?.id && (
+                        <Trash
+                          stroke='red'
+                          onClick={() => deleteRating(rating?.id)}
+                          className='cursor-pointer'
+                          size={20}
+                        />
+                      )}
                     </div>
 
                     <div className='flex gap-2'>
