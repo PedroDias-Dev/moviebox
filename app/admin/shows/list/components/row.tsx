@@ -22,7 +22,7 @@ const ShowsRow = ({ show, index, setSelectedShow, triggerRef, deleteShow }: any)
       <TableCell className='font-medium'>{show.id}</TableCell>
       <TableCell>{show.name}</TableCell>
       <TableCell>{show.genre}</TableCell>
-      <TableCell>{moment(show.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+      <TableCell>{moment(show.createdAt).format('DD/MM/YYYY HH:mm')}</TableCell>
       <TableCell className='flex justify-end'>
         <Trash
           onClick={() => {

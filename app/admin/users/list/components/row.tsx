@@ -7,47 +7,21 @@ import moment from 'moment';
 
 // import { useState } from 'react';
 
-const UsersRow = ({ user, index, setSelectedUser, triggerRef, deleteUser }: any) => {
+const UsersRow = ({ user, index, deleteUser }: any) => {
   const { addDialog } = useDialog();
-  // const [userImage, setUserImage] = useState(null);
-
-  // useEffect(() => {
-  //   // console.log(`users/${user.id}`)
-  //   // const storageRef = ref(storage, `users/${user.id}`);
-  //   // const userImage = getDownloadURL(storageRef).then((url) => {
-  //   //     console.log("🚀 ~ file: row.tsx:19 ~ userImage ~ url:", url)
-
-  //   // }).catch((err) => {});
-  // }, [user]);
 
   return (
-    <TableRow
-      key={index}
-      onClick={e => {
-        if (e?.target instanceof SVGElement) return;
-        e.stopPropagation();
-
-        setSelectedUser(user);
-        triggerRef.current.click();
-      }}
-    >
+    <TableRow key={index}>
       <TableCell className='font-medium'>{user.id}</TableCell>
-      {/* <TableCell>
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>None</AvatarFallback>
-        </Avatar>
-      </TableCell> */}
-      <TableCell>{user.full_name}</TableCell>
+      <TableCell>{user.fullName}</TableCell>
       <TableCell>{user.email}</TableCell>
-      <TableCell>{user.phone || 'N/A'}</TableCell>
-      <TableCell>{moment(user.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+      <TableCell>{moment(user.createdAt).format('DD/MM/YYYY HH:mm')}</TableCell>
       <TableCell className='flex justify-end'>
         <Trash
           onClick={() => {
             addDialog({
-              title: 'Delete User?',
-              description: 'Are you sure you want to delete this user? This action cannot be undone.',
+              title: 'Deletar Usuário?',
+              description: 'Tem certeza que deseja deletar este usuário? Essa ação não pode ser desfeita.',
               onContinue: () => deleteUser(user.id)
             });
           }}

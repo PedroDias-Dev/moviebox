@@ -1,94 +1,88 @@
 'use client';
 
+import { useDialog } from '@/components/global/dialog/dialog';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/components/ui/use-toast';
 import { useApi } from '@/hooks/useApi';
-import { cn } from '@/libs/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
-import { Calendar, CalendarIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar, CalendarIcon } from 'lucide-react';
+import { cn } from '@/libs/utils';
+import { format } from 'date-fns';
+import { useEffect } from 'react';
 
-const UserCreate = () => {
+export default function Profile() {
   const { api } = useApi();
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const formSchema = z.object({
     full_name: z.string().min(5, {
-      message: 'O nome deve ter no mínimo 5 caracteres.'
+      message: 'O nome precisa ter pelo menos 5 caracteres.'
     }),
     email: z.string().email({
-      message: 'O e-mail deve ser válido.'
-    }),
-    password: z.string().min(8, {
-      message: 'A senha deve ter no mínimo 8 caracteres.'
+      message: 'O e-mail precisa ser válido.'
     }),
     birth_date: z.date().min(new Date('1900-01-01'), {
-      message: 'A data de nascimento deve ser válida.'
+      message: 'A data de nascimento precisa ser válida.'
     })
   });
 
+  useEffect(() => {
+    form.reset({
+      full_name: user?.fullName,
+      email: user?.email,
+      birth_date: new Date(user?.birthDate)
+    });
+  }, [user]);
+
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      full_name: '',
-      email: '',
-      password: '',
-      birth_date: new Date('2000-01-01')
-    }
+    resolver: zodResolver(formSchema)
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { full_name, password, email, birth_date } = values;
-
+  const updateProfile = async () => {
     try {
-      await api.post('/api/v1/auth/register', {
-        fullName: full_name,
-        email,
-        password,
-        birthDate: birth_date
-      });
-
-      form.reset();
-
-      toast({
-        variant: 'success',
-        title: 'Sucesso!',
-        description: 'Usuário criado com sucesso.'
-      });
-    } catch (error) {
+      await api.get('/api/v1/user/ratings');
+    } catch {
       toast({
         variant: 'destructive',
-        title: 'Atenção',
-        description: 'Houve um erro ao processar seu pedido. Tente novamente.'
+        title: 'Atenção!',
+        description: 'Houve um erro ao processar suas informações. Por favor, tente novamente mais tarde.'
       });
     }
   };
 
   return (
-    <div className='col-span-1 flex flex-col'>
-      <div className='p-5'>
-        <h1 className='text-4xl font-extrabold'>Crie um usuário</h1>
+    <main className='flex min-h-screen flex-col p-5 gap-6'>
+      <div className='flex flex-col'>
+        <h1 className='text-[44px] font-[900]'>Seu Perfil</h1>
+        <h3 className='text-[16px] font-light italic'>Edite suas informações aqui</h3>
       </div>
 
-      <div className='w-full h-screen rounded-t-lg bg-neutral-800 p-5'>
-        <div className='w-full flex flex-col justify-center items-center'>
+      <Separator />
+
+      <div className='flex flex-col gap-2 items-center'>
+        <div className='flex w-full max-w-[600px] flex-col gap-4'>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-1/3'>
+            <form onSubmit={form.handleSubmit(updateProfile)} className='w-full flex flex-col gap-5'>
               <FormField
                 control={form.control}
                 name='full_name'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nome</FormLabel>
+                    <FormLabel>Qual é seu nome?</FormLabel>
                     <FormControl>
-                      <Input placeholder='Insira um nome' {...field} />
+                      <Input placeholder='Digite seu nome completo, ou um nickname' {...field} />
                     </FormControl>
-                    <FormDescription>Este nome será utilizado para identificar o usuário no sistema.</FormDescription>
+                    <FormDescription>
+                      Este será o nome que aparecerá para os outros usuários dentro da plataforma.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -99,27 +93,12 @@ const UserCreate = () => {
                 name='email'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>E-mail</FormLabel>
+                    <FormLabel>Qual é seu melhor e-mail?</FormLabel>
                     <FormControl>
-                      <Input placeholder='Insira um e-mail' {...field} />
-                    </FormControl>
-                    <FormDescription>Por favor, insira um e-mail válido.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='password'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Senha</FormLabel>
-                    <FormControl>
-                      <Input placeholder='Insira um senha' {...field} />
+                      <Input placeholder='Digite um e-mail' {...field} />
                     </FormControl>
                     <FormDescription>
-                      Insira uma senha segura com no mínimo 8 caracteres, contendo letras e números.
+                      Por favor, insira um e-mail válido, pois ele será usado para entrar na plataforma.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -159,13 +138,15 @@ const UserCreate = () => {
                 )}
               />
 
-              <Button type='submit'>Submit</Button>
+              <div className='flex justify-between items-center'>
+                <Button type='submit' variant='default' size='lg'>
+                  Próximo
+                </Button>
+              </div>
             </form>
           </Form>
         </div>
       </div>
-    </div>
+    </main>
   );
-};
-
-export default UserCreate;
+}

@@ -9,9 +9,11 @@ import UsersTable from './components/table';
 import UsersLoading from './components/loading';
 import { User } from 'lucide-react';
 import { useApi } from '@/hooks/useApi';
+import { useAuth } from '@/hooks/useAuth';
 
 function Users() {
   const { api } = useApi();
+  const { user } = useAuth();
   const [refresh, setRefresh] = useState(0);
   const [page, setPage] = useState(1);
 
@@ -23,7 +25,12 @@ function Users() {
   }, [refresh]);
 
   const getUsers = async () => {
-    setUsers([]);
+    const { data } = await api.get('/api/v1/all/users');
+
+    if (data) {
+      const users = data.filter((item: any) => item.id !== user?.id);
+      setUsers(users);
+    }
   };
 
   return (

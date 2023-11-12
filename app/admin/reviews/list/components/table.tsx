@@ -5,30 +5,30 @@ import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from
 import { useToast } from '@/components/ui/use-toast';
 import { useRef } from 'react';
 
-import UsersRow from './row';
+import ShowsRow from './row';
 import { useApi } from '@/hooks/useApi';
 
-const UsersTable = ({ data, setSelectedUser, getData }: any) => {
+const ReviewsTable = ({ data, setSelectedShow, getData }: any) => {
   const { api } = useApi();
   const { toast } = useToast();
   const triggerRef = useRef(null) as any;
 
-  const deleteUser = async (userId: any) => {
+  const deleteShow = async (movieId: any) => {
     try {
-      await api.delete(`/api/v1/users/${userId}`);
+      await api.delete(`/api/v1/series/${movieId}`);
 
       toast({
         variant: 'success',
         title: 'Sucesso!',
-        description: 'Usuário deletada com sucesso.'
+        description: 'Reviews deletada com sucesso.'
       });
 
       getData();
     } catch (error) {
       toast({
         variant: 'destructive',
-        title: 'Atenção',
-        description: 'Houve um erro ao deletar o usuário. Por favor, tente novamente.'
+        title: 'Atenção!',
+        description: 'Houve um erro ao deletar a reviews. Por favor, tente novamente.'
       });
     }
   };
@@ -36,26 +36,28 @@ const UsersTable = ({ data, setSelectedUser, getData }: any) => {
   return (
     <>
       <Table>
-        <TableCaption>A list of all users - {data.length} total users.</TableCaption>
+        <TableCaption>Todos as reviews - {data.length} reviews totais.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className='w-[100px]'>ID</TableHead>
             {/* <TableHead>Image</TableHead> */}
-            <TableHead>Name</TableHead>
-            <TableHead>E-mail</TableHead>
+            <TableHead>Usuário</TableHead>
+            <TableHead>Media</TableHead>
+            <TableHead>Comentário</TableHead>
+            <TableHead>Estrelas</TableHead>
             <TableHead>Criado em</TableHead>
             <TableHead className='text-right'>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map(async (user: any, index: number) => (
-            <UsersRow
+          {data.map(async (show: any, index: number) => (
+            <ShowsRow
               key={index}
-              user={user}
+              show={show}
               index={index}
-              setSelectedUser={setSelectedUser}
+              setSelectedShow={setSelectedShow}
               triggerRef={triggerRef}
-              deleteUser={deleteUser}
+              deleteShow={deleteShow}
             />
           ))}
         </TableBody>
@@ -66,4 +68,4 @@ const UsersTable = ({ data, setSelectedUser, getData }: any) => {
   );
 };
 
-export default UsersTable;
+export default ReviewsTable;
