@@ -6,6 +6,7 @@ import { Dialog } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { useApi } from '@/hooks/useApi';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Shows() {
@@ -93,21 +94,34 @@ export default function Shows() {
                   setSelectedShow(show);
                   showTrigger.current.click();
                 }}
-                className='flex flex-col gap-3 p-4 min-w-[200px] rounded border-solid border-zinc-700 border-2 transition-all hover:bg-zinc-700 cursor-pointer'
+                className='flex gap-3 p-4 min-w-[200px] rounded border-solid border-zinc-700 border-2 transition-all hover:bg-zinc-700 cursor-pointer'
               >
-                <div className='flex flex-col gap-1'>
-                  <span className='text-[16px] font-[700]'>{show.name}</span>
-                  <p className='text-[12px] font-light'>{show.description}</p>
-                </div>
+                <Image
+                  className='object-contain'
+                  objectFit='contain'
+                  alt={show?.name}
+                  width={100}
+                  height={100}
+                  src={show?.cover}
+                />
+                <div className='flex flex-col h-full justify-between'>
+                  <div className='flex flex-col gap-1'>
+                    <span className='text-[16px] font-[700]'>{show.name}</span>
+                    <p className='text-[12px] font-light'>{show.description}</p>
+                  </div>
 
-                <div className='flex gap-1'></div>
+                  <span className='text-[12px] font-[700]'>{show.year}</span>
+                </div>
               </div>
             ))}
           </div>
         ) : (
           Object.keys(shows).map(key => (
             <div className='flex flex-col gap-3'>
-              <span className='text-[18px]'>{key}</span>
+              <span className='text-[18px]'>
+                <strong>{key}</strong>{' '}
+                <span className='text-[13px] text-neutral-400'>{shows[key].length} série(s)</span>
+              </span>
 
               <div className='flex gap-2 overflow-x-auto'>
                 {shows[key].map((show: any) => (
@@ -116,14 +130,24 @@ export default function Shows() {
                       setSelectedShow(show);
                       showTrigger.current.click();
                     }}
-                    className='flex flex-col gap-3 p-4 min-w-[200px] rounded border-solid border-zinc-700 border-2 transition-all hover:bg-zinc-700 cursor-pointer'
+                    className='flex gap-3 p-4 min-w-[200px] rounded border-solid border-zinc-700 border-2 transition-all hover:bg-zinc-700 cursor-pointer'
                   >
-                    <div className='flex flex-col gap-1'>
-                      <span className='text-[16px] font-[700]'>{show.name}</span>
-                      <p className='text-[12px] font-light'>{show.description}</p>
-                    </div>
+                    <Image
+                      className='object-contain'
+                      objectFit='contain'
+                      alt={show?.name}
+                      width={100}
+                      height={100}
+                      src={show?.cover}
+                    />
+                    <div className='flex flex-col h-full justify-between'>
+                      <div className='flex flex-col gap-1'>
+                        <span className='text-[16px] font-[700]'>{show.name}</span>
+                        <p className='text-[12px] font-light'>{show.description}</p>
+                      </div>
 
-                    <div className='flex gap-1'></div>
+                      <span className='text-[12px] font-[700]'>{show.year}</span>
+                    </div>
                   </div>
                 ))}
               </div>

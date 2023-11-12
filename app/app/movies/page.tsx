@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/components/ui/use-toast';
 import { useApi } from '@/hooks/useApi';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Movies() {
@@ -104,22 +105,31 @@ export default function Movies() {
                   setSelectedMovie(movie);
                   movieTrigger.current.click();
                 }}
-                className='flex flex-col gap-3 p-4 min-w-[200px] rounded border-solid border-zinc-700 border-2 transition-all hover:bg-zinc-700 cursor-pointer'
+                className='flex gap-3 p-4 min-w-[200px] rounded border-solid border-zinc-700 border-2 transition-all hover:bg-zinc-700 cursor-pointer'
               >
-                <div className='flex flex-col gap-1'>
-                  <span className='text-[16px] font-[700]'>{movie.name}</span>
-                  <p className='text-[12px] font-light'>{movie.description}</p>
-                </div>
+                <Image
+                  className='object-contain'
+                  objectFit='contain'
+                  alt={movie?.name}
+                  width={100}
+                  height={100}
+                  src={movie?.cover}
+                />
+                <div className='flex flex-col h-full justify-between'>
+                  <div className='flex flex-col gap-1'>
+                    <span className='text-[16px] font-[700]'>{movie.name}</span>
+                    <p className='text-[12px] font-light'>{movie.description}</p>
+                  </div>
 
-                <div className='flex gap-1'></div>
+                  <span className='text-[12px] font-[700]'>{movie.year}</span>
+                </div>
               </div>
             ))}
           </div>
         ) : (
           Object.keys(movies).map(key => (
             <div className='flex flex-col gap-3'>
-              <span className='text-[18px]'>{key}</span>
-
+              <strong>{key}</strong> <span className='text-[13px] text-neutral-400'>{movies[key].length} filme(s)</span>
               <div className='flex gap-2 overflow-x-auto'>
                 {movies[key].map((movie: any) => (
                   <div
@@ -127,14 +137,24 @@ export default function Movies() {
                       setSelectedMovie(movie);
                       movieTrigger.current.click();
                     }}
-                    className='flex flex-col gap-3 p-4 min-w-[200px] rounded border-solid border-zinc-700 border-2 transition-all hover:bg-zinc-700 cursor-pointer'
+                    className='flex gap-3 p-4 min-w-[200px] rounded border-solid border-zinc-700 border-2 transition-all hover:bg-zinc-700 cursor-pointer'
                   >
-                    <div className='flex flex-col gap-1'>
-                      <span className='text-[16px] font-[700]'>{movie.name}</span>
-                      <p className='text-[12px] font-light'>{movie.description}</p>
-                    </div>
+                    <Image
+                      className='object-contain'
+                      objectFit='contain'
+                      alt={movie?.name}
+                      width={100}
+                      height={100}
+                      src={movie?.cover}
+                    />
+                    <div className='flex flex-col h-full justify-between'>
+                      <div className='flex flex-col gap-1'>
+                        <span className='text-[16px] font-[700]'>{movie.name}</span>
+                        <p className='text-[12px] font-light'>{movie.description}</p>
+                      </div>
 
-                    <div className='flex gap-1'></div>
+                      <span className='text-[12px] font-[700]'>{movie.year}</span>
+                    </div>
                   </div>
                 ))}
               </div>

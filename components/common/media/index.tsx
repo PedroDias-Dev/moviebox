@@ -100,13 +100,20 @@ export const Media = ({ media = {}, triggerRef, mediaType }: { media: any; trigg
         </DialogHeader>
 
         <div className='w-full flex gap-5'>
-          <Image objectFit='contain' alt={media?.name} width={300} height={300} src={media?.cover} />
+          <Image
+            className='object-contain'
+            objectFit='contain'
+            alt={media?.name}
+            width={300}
+            height={300}
+            src={media?.cover}
+          />
           <div className='w-full max-h-[400px] flex flex-col gap-3 overflow-auto'>
-            <div className='rounded-lg bg-neutral-200 p-3 flex items-center justify-center max-w-[100px]'>
+            {/* <div className='rounded-lg bg-neutral-200 p-3 flex items-center justify-center max-w-[100px]'>
               <span className='text-black'>
                 Nota: <strong>10</strong>
               </span>
-            </div>
+            </div> */}
 
             <p className='flex flex-col gap-2'>
               <span className='text-neutral-400 text-sm'>Descrição</span>
@@ -125,7 +132,9 @@ export const Media = ({ media = {}, triggerRef, mediaType }: { media: any; trigg
                           <FormLabel>Digite sua avaliação</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder='O que você achou desse filme/série?'
+                              placeholder={`O que você achou ${
+                                mediaType === 'movies' ? 'desse filme' : 'dessa série'
+                              }?`}
                               className='resize-none'
                               {...field}
                             />
@@ -165,7 +174,9 @@ export const Media = ({ media = {}, triggerRef, mediaType }: { media: any; trigg
               <span className='text-neutral-400 text-sm pt-3'>Avaliações</span>
 
               {ratings.length === 0 && (
-                <p className='text-neutral-500 text-sm'>Ninguém avaliou esse filme ainda... quer ser o primeiro?</p>
+                <p className='text-neutral-500 text-sm'>
+                  Ninguém avaliou {mediaType === 'movies' ? 'esse filme' : 'essa série'} ainda... quer ser o primeiro?
+                </p>
               )}
 
               {ratings.map((rating: any) => (
