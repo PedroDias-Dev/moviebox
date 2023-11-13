@@ -13,14 +13,14 @@ const ReviewsTable = ({ data, setSelectedShow, getData }: any) => {
   const { toast } = useToast();
   const triggerRef = useRef(null) as any;
 
-  const deleteShow = async (movieId: any) => {
+  const deleteReview = async (review: any) => {
     try {
-      await api.delete(`/api/v1/series/${movieId}`);
+      await api.delete(`/api/v1/${review.mediaType}/${review.mediaId}/ratings/${review.id}`);
 
       toast({
         variant: 'success',
         title: 'Sucesso!',
-        description: 'Reviews deletada com sucesso.'
+        description: 'Review deletada com sucesso.'
       });
 
       getData();
@@ -28,7 +28,7 @@ const ReviewsTable = ({ data, setSelectedShow, getData }: any) => {
       toast({
         variant: 'destructive',
         title: 'Atenção!',
-        description: 'Houve um erro ao deletar a reviews. Por favor, tente novamente.'
+        description: 'Houve um erro ao deletar a review. Por favor, tente novamente.'
       });
     }
   };
@@ -57,7 +57,7 @@ const ReviewsTable = ({ data, setSelectedShow, getData }: any) => {
               index={index}
               setSelectedShow={setSelectedShow}
               triggerRef={triggerRef}
-              deleteShow={deleteShow}
+              deleteShow={deleteReview}
             />
           ))}
         </TableBody>

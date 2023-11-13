@@ -2,14 +2,7 @@
 
 import Transition from '@/components/motion/Transition';
 import { Button } from '@/components/ui/button';
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarTrigger
-} from '@/components/ui/menubar';
+import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -37,8 +30,6 @@ const UsersMenu = ({ setPage, setRefresh, refresh, page }: UsersMenuProps) => {
             >
               New User
             </MenubarItem>
-            <MenubarSeparator />
-            <MenubarItem>Export</MenubarItem>
           </MenubarContent>
         </Transition>
       </MenubarMenu>

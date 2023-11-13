@@ -20,7 +20,7 @@ import { useEffect } from 'react';
 export default function Profile() {
   const { api } = useApi();
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, refresh } = useAuth();
 
   const formSchema = z.object({
     full_name: z.string().min(5, {
@@ -46,9 +46,22 @@ export default function Profile() {
     resolver: zodResolver(formSchema)
   });
 
-  const updateProfile = async () => {
+  const updateProfile = async (values: z.infer<typeof formSchema>) => {
+    const { full_name, email, birth_date } = values;
     try {
-      await api.get('/api/v1/user/ratings');
+      await api.put('/api/v1/profile', {
+        fullName: full_name,
+        email,
+        birthDate: birth_date
+      });
+
+      toast({
+        variant: 'success',
+        title: 'Sucesso!',
+        description: 'Perfil atualizado com sucesso'
+      });
+
+      refresh(false);
     } catch {
       toast({
         variant: 'destructive',
@@ -140,7 +153,7 @@ export default function Profile() {
 
               <div className='flex justify-between items-center'>
                 <Button type='submit' variant='default' size='lg'>
-                  Próximo
+                  Atualizar
                 </Button>
               </div>
             </form>

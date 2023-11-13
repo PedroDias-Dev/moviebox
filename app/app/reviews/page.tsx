@@ -30,27 +30,7 @@ export default function Reviews() {
       const { data } = await api.get('/api/v1/user/ratings');
 
       if (data) {
-        const all = [] as any;
-
-        for (let movie of data.movies) {
-          all.push({
-            ...movie,
-            media: movie.movie.name,
-            mediaId: movie.movie.id,
-            mediaType: 'movies'
-          });
-        }
-
-        for (let serie of data.series) {
-          all.push({
-            ...serie,
-            media: serie.serie.name,
-            mediaId: serie.serie.id,
-            mediaType: 'series'
-          });
-        }
-
-        setReviews(all);
+        setReviews(data);
       }
     } catch {
       toast({

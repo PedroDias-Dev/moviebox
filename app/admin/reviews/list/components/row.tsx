@@ -24,7 +24,7 @@ const ShowsRow = ({ show: review, index, deleteShow }: any) => {
             addDialog({
               title: 'Deletar review?',
               description: 'Tem certeza que deseja deletar esta review? Essa ação não pode ser desfeita.',
-              onContinue: () => deleteShow(review.id)
+              onContinue: () => deleteShow(review)
             });
           }}
           className='w-5 h-5 cursor-pointer'
